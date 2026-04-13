@@ -67,15 +67,15 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 
 # kerja
-git checkout testing
+- git checkout testing
 
 # simpan
-git add .
-git commit -m "fitur baru"
-git push origin testing
+- git add .
+- git commit -m "fitur baru"
+- git push origin testing
 
 # gabung ke main
-git checkout main
-git pull origin main
-git merge testing
-git push origin main
+- git checkout main
+- git pull origin main
+- git merge testing
+- git push origin main
