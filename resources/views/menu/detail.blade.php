@@ -42,12 +42,17 @@
 
             <h2 class="fw-bold mb-2">{{ $menu->nama_menu }}</h2>
 
-            <h3 class="text-danger fw-bold mb-3">
+            <h3 class="text-dark fw-bold mb-3">
                 Rp {{ number_format($menu->harga, 0, ',', '.') }}
             </h3>
 
-            <p class="text-muted mb-4">
+            {{-- Desk Awal --}}
+            {{-- <p class="text-muted mb-4">
                 {{ $menu->deskripsi ?? 'Tidak ada deskripsi untuk menu ini.' }}
+            </p> --}}
+
+            <p class="text-muted mb-4">
+                {!! nl2br(e($menu->deskripsi ?? 'Tidak ada deskripsi untuk menu ini.')) !!}
             </p>
 
             <hr>
@@ -56,11 +61,11 @@
             <div class="mb-4">
                 <label class="form-label fw-semibold">Jumlah</label>
                 <div class="d-flex align-items-center gap-3">
-                    <button class="btn btn-outline-danger btn-sm px-3" id="btnKurang">
+                    <button class="btn btn-outline-dark btn-sm px-3" id="btnKurang">
                         <i class="bi bi-dash-lg"></i>
                     </button>
                     <span class="fs-5 fw-bold" id="jumlahItem">1</span>
-                    <button class="btn btn-outline-danger btn-sm px-3" id="btnTambah">
+                    <button class="btn btn-outline-dark btn-sm px-3" id="btnTambah">
                         <i class="bi bi-plus-lg"></i>
                     </button>
                 </div>
@@ -69,14 +74,14 @@
             {{-- Subtotal --}}
             <div class="mb-4">
                 <span class="text-muted">Subtotal: </span>
-                <span class="fw-bold text-danger fs-5" id="subtotal">
+                <span class="fw-bold text-dark fs-5" id="subtotal">
                     Rp {{ number_format($menu->harga, 0, ',', '.') }}
                 </span>
             </div>
 
             {{-- Tombol Aksi --}}
             <div class="d-flex gap-3 flex-wrap">
-                <button class="btn btn-danger px-4" id="btnAddCart"
+                <button class="btn btn-success px-4" id="btnAddCart"
                         data-id="{{ $menu->id }}"
                         data-nama="{{ $menu->nama_menu }}"
                         data-harga="{{ $menu->harga }}">

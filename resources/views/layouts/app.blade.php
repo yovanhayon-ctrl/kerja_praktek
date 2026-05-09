@@ -14,41 +14,98 @@
     {{-- Custom CSS --}}
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
+     {{-- Navbar underline fix --}}
+    <style>
+        .navbar-nav .nav-link {
+            position: relative !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            padding-bottom: 6px !important;
+        }
+        .navbar-nav .nav-link::after {
+            content: '' !important;
+            position: absolute !important;
+            bottom: 0 !important;
+            left: 50% !important;
+            width: 0 !important;
+            height: 2.5px !important;
+            background-color: #16a34a !important;
+            border-radius: 2px !important;
+            transition: left 0.3s ease, width 0.3s ease !important;
+        }
+        .navbar-nav .nav-link:hover::after {
+            left: 25% !important;
+            width: 50% !important;
+        }
+        .navbar-nav .nav-link:hover {
+            background: transparent !important;
+            color: #16a34a !important;
+        }
+    </style>
+
     @stack('styles')
 </head>
 <body>
 
     {{-- NAVBAR --}}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-danger sticky-top shadow">
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top" style="background-color: #ffffff; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
         <div class="container">
-            <a class="navbar-brand fw-bold fs-4" href="{{ url('/') }}">
-                <i class="bi bi-shop"></i> RestoKu
+
+            {{-- LOGO + NAMA --}}
+            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="{{ url('/') }}" style="color: #000; position: relative; height: fit-content;">
+                <img src="{{ asset('images/logo.png') }}"
+                     alt="RestoKu Logo"
+                     style="height: 110px; width: 110px; object-fit: contain; border-radius: 8px; margin: -25px 0 -25px -40px;">
+                {{-- <span style="font-size: 1.25rem; letter-spacing: 0.5px;">RestoKu</span> --}}
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+
+            {{-- TOGGLER (mobile) --}}
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+            {{-- MENU --}}
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center gap-1">
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->is('/') ? 'active fw-semibold' : '' }}" href="{{ url('/') }}">Beranda</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('menu*') ? 'active fw-semibold' : '' }}" href="{{ url('/menu') }}">Menu</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('tentang*') ? 'active fw-semibold' : '' }}" href="{{ url('/tentang') }}">Tentang</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link position-relative" href="{{ url('/cart') }}">
-                            <i class="bi bi-cart3 fs-5"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark" id="cart-badge">
-                                0
-                            </span>
+                        <a class="nav-link nav-link-hover px-3 py-2" style="color: #000;" href="{{ url('/') }}">
+                            <i class="bi bi-house-door me-1"></i> Beranda
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-outline-light btn-sm ms-2" href="{{ url('/riwayat') }}">
-                            <i class="bi bi-clock-history"></i> Riwayat
+                        <a class="nav-link nav-link-hover px-3 py-2" style="color: #000;" href="{{ url('/menu') }}">
+                            <i class="bi bi-grid me-1"></i> Menu
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-hover px-3 py-2" style="color: #000;" href="{{ url('/tentang') }}">
+                            <i class="bi bi-info-circle me-1"></i> Tentang
+                        </a>
+                    </li>
+
+                    {{-- Divider --}}
+                    <li class="nav-item mx-1">
+                        <span style="border-left: 1px solid rgba(0,0,0,0.2); height: 24px; display: inline-block;"></span>
+                    </li>
+
+                    {{-- Cart --}}
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-hover position-relative px-3 py-2" href="{{ url('/cart') }}" style="color: #000;">
+                            <i class="bi bi-cart3 fs-5"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark"
+                                  style="font-size: 0.65rem;"
+                                  id="cart-badge">0</span>
+                        </a>
+                    </li>
+
+                    {{-- Riwayat --}}
+                    <li class="nav-item">
+                        <a class="btn btn-sm ms-1 fw-semibold"
+                           href="{{ url('/riwayat') }}"
+                           style="background-color: rgba(0,0,0,0.08); color: #000; border: 1.5px solid rgba(0,0,0,0.2); border-radius: 20px; padding: 5px 14px; transition: all 0.2s;"
+                           onmouseover="this.style.backgroundColor='rgba(0,0,0,0.12)'"
+                           onmouseout="this.style.backgroundColor='rgba(0,0,0,0.08)'">
+                            <i class="bi bi-clock-history me-1"></i> Riwayat
                         </a>
                     </li>
                 </ul>
@@ -93,6 +150,9 @@
 
     {{-- Bootstrap JS --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    {{-- Custom JS --}}
+    <script src="{{ asset('js/app.js') }}"></script>
 
     @stack('scripts')
 </body>

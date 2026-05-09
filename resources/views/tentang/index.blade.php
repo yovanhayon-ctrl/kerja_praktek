@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Tentang Kami - RestoKu')
+@section('title', 'Tentang Kami - RM Saung Tiga')
 
 @section('content')
 
 {{-- HERO TENTANG --}}
-<section class="bg-danger text-white py-5">
+<section class="py-5 text-white d-flex align-items-center" style="min-height: 400px; background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('{{ asset('images/tentang.jpg') }}') center/cover no-repeat;">">
     <div class="container text-center py-3">
-        <h1 class="fw-bold mb-2">Tentang RestoKu</h1>
+        <h1 class="fw-bold mb-2">Tentang Rumah Makan Saung Tiga</h1>
         <p class="mb-0 opacity-75 fs-5">Mengenal kami lebih dekat</p>
     </div>
 </section>
@@ -17,10 +17,10 @@
     <div class="container">
         <div class="row align-items-center g-5">
             <div class="col-md-6">
-                <span class="badge bg-danger-subtle text-danger mb-2">Tentang Kami</span>
+                <span class="badge bg-primary-subtle text-primary mb-2">Tentang Kami</span>
                 <h2 class="fw-bold mb-3">Kami Hadir untuk Memuaskan Selera Anda</h2>
                 <p class="text-muted mb-3">
-                    RestoKu adalah rumah makan yang berdiri sejak tahun 2020 dengan misi sederhana:
+                    RM Saung Tiga adalah rumah makan yang berdiri sejak tahun 2020 dengan misi sederhana:
                     menyajikan makanan lezat berkualitas tinggi dengan harga yang terjangkau untuk semua kalangan.
                 </p>
                 <p class="text-muted mb-3">
@@ -28,7 +28,7 @@
                     dari petani lokal. Kami percaya bahwa makanan yang baik dimulai dari bahan baku yang berkualitas.
                 </p>
                 <p class="text-muted">
-                    Dengan pengalaman lebih dari 4 tahun melayani pelanggan setia kami, RestoKu terus berinovasi
+                    Dengan pengalaman lebih dari 4 tahun melayani pelanggan setia kami, RM Saung Tiga terus berinovasi
                     dalam menghadirkan menu-menu baru yang memanjakan lidah tanpa menguras kantong.
                 </p>
             </div>
@@ -73,16 +73,16 @@
             <div class="col-md-4">
                 <div class="card border-0 shadow-sm h-100 p-4">
                     <div class="d-flex align-items-center gap-3 mb-3">
-                        <div class="bg-danger bg-opacity-10 rounded d-flex align-items-center justify-content-center"
-                             style="width:48px; height:48px;">
-                            <i class="bi bi-geo-alt-fill text-danger fs-5"></i>
+                        <div class="bg-success bg-opacity-10 rounded d-flex align-items-center justify-content-center"
+                            style="width:48px; height:48px;">
+                            <i class="bi bi-geo-alt-fill text-success fs-5"></i>
                         </div>
                         <h6 class="fw-bold mb-0">Alamat</h6>
                     </div>
-                    <p class="text-muted mb-1">Jl. Contoh No. 123</p>
-                    <p class="text-muted mb-1">Kelurahan Contoh, Kecamatan Contoh</p>
-                    <p class="text-muted mb-3">Kota Contoh, 12345</p>
-                    <a href="https://maps.google.com" target="_blank" class="btn btn-outline-danger btn-sm w-100">
+                    <p class="text-muted mb-1">Jl. Pemuda No.2, RT.02/RW.06</p>
+                    <p class="text-muted mb-1">Sawangan Baru, Kec. Sawangan</p>
+                    <p class="text-muted mb-3">Kota Depok, Jawa Barat 16511</p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=RM+Saung+Tiga+Sawangan+Depok" target="_blank" class="btn btn-outline-success btn-sm w-100">
                         <i class="bi bi-map"></i> Lihat di Google Maps
                     </a>
                 </div>
@@ -140,8 +140,8 @@
                         </li>
                         <li class="mb-3">
                             <small class="text-muted d-block mb-1">Email</small>
-                            <a href="mailto:info@restoKu.com" class="text-decoration-none fw-semibold text-dark">
-                                <i class="bi bi-envelope text-danger me-1"></i> info@restoKu.com
+                            <a href="mailto:info@rmsaungtiga.com" class="text-decoration-none fw-semibold text-dark">
+                                <i class="bi bi-envelope text-danger me-1"></i> info@rmsaungtiga.com
                             </a>
                         </li>
                         <li>
@@ -205,7 +205,7 @@
                             @error('pesan') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-danger">
+                            <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-send"></i> Kirim Pesan
                             </button>
                         </div>

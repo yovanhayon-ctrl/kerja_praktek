@@ -144,7 +144,7 @@
                 {{-- Ikon --}}
                 <div class="bg-danger bg-opacity-10 rounded d-flex align-items-center justify-content-center flex-shrink-0"
                      style="width:56px; height:56px;">
-                    <i class="bi bi-egg-fried text-danger fs-4"></i>
+                    <i class="bi bi-cart2 text-danger fs-4"></i>
                 </div>
 
                 {{-- Info --}}

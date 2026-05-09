@@ -36,19 +36,24 @@
         <div class="col-md-6">
             <div class="d-flex gap-2 flex-wrap">
                 <a href="{{ url('/menu') }}?search={{ request('search') }}"
-                   class="btn btn-sm filter-btn {{ !request('kategori') ? 'btn-danger active' : 'btn-outline-danger' }}"
+                   class="btn btn-sm filter-btn {{ !request('kategori') ? 'btn-success active' : 'btn-outline-success' }}"
                    style="border-radius:20px;">
                     Semua
                 </a>
                 <a href="{{ url('/menu') }}?kategori=Makanan&search={{ request('search') }}"
-                   class="btn btn-sm filter-btn {{ request('kategori') == 'Makanan' ? 'btn-danger active' : 'btn-outline-danger' }}"
+                   class="btn btn-sm filter-btn {{ request('kategori') == 'Makanan' ? 'btn-success active' : 'btn-outline-success' }}"
                    style="border-radius:20px;">
-                    <i class="bi bi-egg-fried"></i> Makanan
+                    Makanan
                 </a>
                 <a href="{{ url('/menu') }}?kategori=Minuman&search={{ request('search') }}"
-                   class="btn btn-sm filter-btn {{ request('kategori') == 'Minuman' ? 'btn-danger active' : 'btn-outline-danger' }}"
+                   class="btn btn-sm filter-btn {{ request('kategori') == 'Minuman' ? 'btn-success active' : 'btn-outline-success' }}"
                    style="border-radius:20px;">
-                    <i class="bi bi-cup-straw"></i> Minuman
+                    Minuman
+                </a>
+                <a href="{{ url('/menu') }}?kategori=Paket&search={{ request('search') }}"
+                   class="btn btn-sm filter-btn {{ request('kategori') == 'Paket' ? 'btn-success active' : 'btn-outline-success' }}"
+                   style="border-radius:20px;">
+                    Paket
                 </a>
             </div>
         </div>
@@ -106,7 +111,7 @@
                     <p class="text-muted small mb-2" style="min-height:36px;">
                         {{ Str::limit($menu->deskripsi, 50, '...') }}
                     </p>
-                    <p class="text-danger fw-bold mb-3 mt-auto">
+                    <p class="text-dark fw-bold mb-3 mt-auto">
                         Rp {{ number_format($menu->harga, 0, ',', '.') }}
                     </p>
 
@@ -116,7 +121,7 @@
                            class="btn btn-outline-secondary btn-sm flex-fill">
                             <i class="bi bi-eye"></i> Detail
                         </a>
-                        <button class="btn btn-danger btn-sm flex-fill btn-tambah-cart"
+                        <button class="btn btn-success btn-sm flex-fill btn-tambah-cart"
                                 data-id="{{ $menu->id }}"
                                 data-nama="{{ $menu->nama_menu }}"
                                 data-harga="{{ $menu->harga }}">
