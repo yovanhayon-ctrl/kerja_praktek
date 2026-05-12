@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        // Cek apakah kolom catatan sudah ada
+        if (!Schema::hasColumn('pesanans', 'catatan')) {
+            Schema::table('pesanans', function (Blueprint $table) {
+                $table->text('catatan')->nullable()->after('nomor_meja');
+            });
+        }
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('pesanans', function (Blueprint $table) {
+            if (Schema::hasColumn('pesanans', 'catatan')) {
+                $table->dropColumn('catatan');
+            }
+        });
+    }
+};

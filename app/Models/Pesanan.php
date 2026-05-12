@@ -11,16 +11,17 @@ class Pesanan extends Model
 
     protected $table = 'pesanans';
 
+    // File: app/Models/Pesanan.php
     protected $fillable = [
-        'nama_pemesan',
-        'no_meja',
+        'id_pesanan',
+        'nama_pelanggan',
+        'nomor_meja',
         'catatan',
-        'metode_pembayaran',
+        'detail_menu',
         'total_harga',
         'status',
     ];
 
-    // Relasi ke detail pesanan
     public function details()
     {
         return $this->hasMany(DetailPesanan::class, 'pesanan_id');

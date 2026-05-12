@@ -19,12 +19,13 @@ class CheckoutController extends Controller
 
         // Simpan pesanan utama
         $pesanan = Pesanan::create([
-            'nama_pemesan'      => $request->nama,
-            'no_meja'           => $request->no_meja,
-            'catatan'           => $request->catatan,
-            'metode_pembayaran' => 'cash',
+            'id_pesanan'        => 'ORD-' . strtoupper(uniqid()), // Tambahkan ini agar ID tidak kosong
+            'nama_pelanggan'    => $request->nama,                // SESUAI MIGRATION
+            'nomor_meja'        => $request->no_meja,             // SESUAI MIGRATION
+            'catatan'           => $request->catatan,              // Simpan catatan dari checkout
+            'detail_menu'       => $request->items,               // SESUAI MIGRATION (Simpan JSON)
             'total_harga'       => $request->total,
-            'status'            => 'pending',
+            'status'            => 'PENDING',                     // Gunakan Huruf Kapital sesuai Enum
         ]);
 
         // Simpan detail item pesanan

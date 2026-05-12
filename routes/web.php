@@ -7,84 +7,50 @@ use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\RiwayatController;
 
-// Import Controller Admin
+// Admin Controllers
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdminMenuController;
 use App\Http\Controllers\Admin\AdminPesananController;
 use App\Http\Controllers\Admin\StatistikController;
 use App\Http\Controllers\Admin\ManajemenAdminController;
 
-use App\Mail\KontakKami;
-use Illuminate\Support\Facades\Mail;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
-
-// --- RUTE CUSTOMER (FRONTEND) ---
+// --- RUTE CUSTOMER ---
 Route::get('/', [BerandaController::class, 'index'])->name('beranda');
-Route::get('/menu', [MenuController::class, 'index']);
-Route::get('/menu/create', [MenuController::class, 'create']);
-Route::get('/menu/{id}', [MenuController::class, 'show']);
-Route::post('/menu/store', [MenuController::class, 'store']);
-Route::get('/cart', function () { return view('cart.index'); });
-Route::get('/checkout', function () { return view('checkout.index'); });
-Route::post('/checkout/simpan', [CheckoutController::class, 'simpan']);
-Route::get('/riwayat', [RiwayatController::class, 'index']);
-Route::get('/tentang', function () { return view('tentang.index'); });
+Route::get('/menu', [MenuController::class, 'index'])->name('menu.index');
+Route::get('/menu/{id}', [MenuController::class, 'show'])->name('menu.show');
+Route::get('/cart', function () { return view('cart.index'); })->name('cart');
+Route::get('/checkout', function () { return view('checkout.index'); })->name('checkout');
+Route::post('/checkout/simpan', [CheckoutController::class, 'simpan'])->name('checkout.simpan');
+Route::get('/riwayat', [RiwayatController::class, 'index'])->name('riwayat');
+Route::get('/tentang', function () { return view('tentang.index'); })->name('tentang');
 
-Route::post('/tentang/kirim', function (\Illuminate\Http\Request $request) {
-    $data = $request->validate([
-        'nama'  => 'required',
-        'email' => 'required|email',
-        'pesan' => 'required',
-    ]);
-    Mail::to('yhsec2004@gmail.com')->send(new KontakKami($data));
-    return back()->with('pesan_sukses', 'Pesan kamu berhasil dikirim!');
-});
+// --- RUTE LOGIN/LOGOUT ---
+Route::get('/login', function () { return view('admin.login'); })->name('login');
 
-// --- RUTE LOGIN ADMIN ---
-Route::get('/login', function () {
-    return view('admin.login'); // Memanggil file login.blade.php
-})->name('login');
+// PASTIKAN: Di DashboardController harus ada method bernama 'authenticate' atau 'login'
+// Jika Anda menggunakan Auth bawaan Laravel, biasanya ini lari ke LoginController
+Route::post('/login', [DashboardController::class, 'login'])->name('login.post'); 
 
-Route::post('/login', function (\Illuminate\Http\Request $request) {
-    $credentials = $request->validate([
-        'email' => ['required', 'email'],
-        'password' => ['required'],
-    ]);
-
-    if (Auth::attempt($credentials)) {
-        $request->session()->regenerate();
-        return redirect()->intended('admin/dashboard');
-    }
-
-    return back()->withErrors(['email' => 'Email atau password salah.']);
-})->name('login.post');
-
-
-// --- RUTE ADMIN PANEL (BACKEND) DENGAN PENGAMAN ---
+// --- RUTE ADMIN PANEL (DILINDUNGI AUTH) ---
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     
-    // Dashboard Utama
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Kelola Menu
-    Route::get('/menu', [AdminMenuController::class, 'index'])->name('menu.index');
+    // Menu
+    Route::resource('menu', AdminMenuController::class)->except(['show']);
+    Route::patch('/menu/{id}/toggle', [AdminMenuController::class, 'toggleStatus'])->name('menu.toggle');
     
-    // Data Pesanan
+    // DATA PESANAN
     Route::get('/pesanan', [AdminPesananController::class, 'index'])->name('pesanan.index');
-    Route::get('/pesanan/detail/{id}', [AdminPesananController::class, 'show'])->name('pesanan.detail');
+    Route::get('/pesanan/detail/{id}', [AdminPesananController::class, 'show'])->name('pesanan.show');
+    Route::patch('/pesanan/{id}/status', [AdminPesananController::class, 'updateStatus'])->name('pesanan.updateStatus');
     
-    // Statistik
+    // Statistik & Manajemen Admin
     Route::get('/statistik', [StatistikController::class, 'index'])->name('statistik');
     
-    // Manajemen Admin
-    Route::get('/manajemen-admin', [ManajemenAdminController::class, 'index'])->name('admin.index');
+    // PERBAIKAN: Nama route disesuaikan agar tidak bentrok (admin.manajemen)
+    Route::get('/manajemen-admin', [ManajemenAdminController::class, 'index'])->name('manajemen.index');
 
-    // Logout
     Route::post('/logout', function () {
         Auth::logout();
         request()->session()->invalidate();
