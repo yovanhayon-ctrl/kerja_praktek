@@ -4,10 +4,10 @@
 <div class="container-fluid py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h4 class="fw-bold mb-0">Daftar Menu</h4>
-            <p class="text-muted small">Kelola semua menu makanan dan minuman restoran Anda</p>
+            <h4 class="fw-bold mb-0" style="font-size: 1.25rem;">Daftar Menu</h4>
+            <p class="text-muted small" style="font-size: 0.75rem;">Kelola semua menu makanan dan minuman restoran Anda</p>
         </div>
-        <a href="{{ route('admin.menu.create') }}" class="btn btn-success px-4" style="background-color: #2d6a4f; border-radius: 10px;">
+        <a href="{{ route('admin.menu.create') }}" class="btn btn-success px-4 fw-bold" style="background-color: #2d6a4f; border-radius: 10px; font-size: 0.8rem;">
             <i class="bi bi-plus-lg me-2"></i> Add Menu
         </a>
     </div>
@@ -16,7 +16,7 @@
         <div class="table-responsive">
             <table class="table align-middle">
                 <thead class="bg-light">
-                    <tr>
+                    <tr class="text-muted" style="font-size: 0.65rem;">
                         <th class="ps-4">Gambar</th>
                         <th>Nama Menu</th>
                         <th>Kategori</th>
@@ -24,7 +24,7 @@
                         <th>Status</th> <th class="text-end pe-4">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody style="font-size: 0.75rem;">
                     @foreach($menus as $menu)
                     <tr>
                         <td class="ps-4">
@@ -32,9 +32,9 @@
                         </td>
                         <td>
                             <div class="fw-bold text-dark">{{ $menu->nama_menu }}</div>
-                            <div class="text-muted x-small text-truncate" style="max-width: 200px;">{{ $menu->deskripsi }}</div>
+                            <div class="text-muted x-small text-truncate" style="max-width: 200px; font-size: 0.65rem;">{{ $menu->deskripsi }}</div>
                         </td>
-                        <td><span class="badge bg-light text-dark border">{{ $menu->kategori }}</span></td>
+                        <td><span class="badge bg-light text-dark border" style="font-size: 0.6rem;">{{ $menu->kategori }}</span></td>
                         <td class="fw-bold">Rp {{ number_format($menu->harga, 0, ',', '.') }}</td>
                         
                         <td>
@@ -47,7 +47,7 @@
                                            onchange="document.getElementById('status-form-{{ $menu->id }}').submit()"
                                            {{ $menu->status ? 'checked' : '' }}
                                            style="cursor: pointer;">
-                                    <label class="form-check-label small ms-1 {{ $menu->status ? 'text-success' : 'text-danger' }}" for="switch{{ $menu->id }}">
+                                    <label class="form-check-label fw-bold ms-1 {{ $menu->status ? 'text-success' : 'text-danger' }}" for="switch{{ $menu->id }}" style="font-size: 0.7rem;">
                                         {{ $menu->status ? 'Tersedia' : 'Habis' }}
                                     </label>
                                 </div>

@@ -73,7 +73,40 @@
                                     @endphp
                                     <span class="badge bg-{{ $bg }}-subtle text-{{ $bg }} px-2 py-1" style="font-size: 0.6rem;">{{ $st }}</span>
                                 </td>
-                                <td><i class="bi bi-eye text-muted"></i></td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{{ route('admin.pesanan.show', $o->id) }}" class="btn btn-light border" title="Detail">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-light border dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <span class="visually-hidden">Toggle Dropdown</span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 text-center" style="font-size: 0.75rem;">
+                                            @if(strtoupper($o->status) !== 'SELESAI' && strtoupper($o->status) !== 'DIBATALKAN')
+                                            <li>
+                                                <form action="{{ route('admin.pesanan.updateStatus', $o->id) }}" method="POST" class="d-inline">
+                                                    @csrf @method('PATCH')
+                                                    <input type="hidden" name="status" value="DIPROSES">
+                                                    <button type="submit" class="dropdown-item">
+                                                        <i class="bi bi-gear me-1"></i> Proses
+                                                    </button>
+                                                </form>
+                                            </li>
+                                            @endif
+                                            @if(strtoupper($o->status) !== 'SELESAI' && strtoupper($o->status) !== 'DIBATALKAN')
+                                            <li>
+                                                <form action="{{ route('admin.pesanan.updateStatus', $o->id) }}" method="POST" class="d-inline">
+                                                    @csrf @method('PATCH')
+                                                    <input type="hidden" name="status" value="SELESAI">
+                                                    <button type="submit" class="dropdown-item">
+                                                        <i class="bi bi-check-circle me-1"></i> Selesai
+                                                    </button>
+                                                </form>
+                                            </li>
+                                            @endif
+                                        </ul>
+                                    </div>
+                                </td>
                             </tr>
                             @empty
                             <tr>

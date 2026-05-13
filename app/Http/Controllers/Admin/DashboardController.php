@@ -7,6 +7,7 @@ use App\Models\Menu;
 use App\Models\Pesanan;
 use App\Models\DetailPesanan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request; 
 use Carbon\Carbon;
 
@@ -67,5 +68,30 @@ class DashboardController extends Controller
             'persen_pesanan', 'status_data', 'pendapatan_hari_ini',
             'jumlah_pesanan_hari_ini', 'recent_orders', 'total_orders_count'
         ));
+    }
+
+    public function login(Request $request)
+    {
+        // Validasi input
+        $credentials = $request->validate([
+            'email'    => 'required|email',
+            'password' => 'required|min:6',
+        ], [
+            'email.required'    => 'Email harus diisi',
+            'email.email'       => 'Format email tidak valid',
+            'password.required' => 'Password harus diisi',
+            'password.min'      => 'Password minimal 6 karakter',
+        ]);
+
+        // Coba autentikasi
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended(route('admin.dashboard'))->with('success', 'Login berhasil!');
+        }
+
+        // Login gagal
+        return back()->withErrors([
+            'email' => 'Email atau password salah.',
+        ])->onlyInput('email');
     }
 }
