@@ -49,7 +49,7 @@
             <div class="card border-0 shadow-sm p-4 h-100" style="border-radius: 15px;">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h6 class="fw-bold mb-0" style="font-size: 0.9rem;">Recent Orders</h6>
-                    <a href="#" class="text-success text-decoration-none fw-bold" style="font-size: 0.7rem;">Lihat Semua</a>
+                    <a href="{{ route('admin.pesanan.index') }}" class="btn btn-outline-success btn-sm fw-bold" style="border-radius: 20px; font-size: 0.75rem; padding: 0.4rem 1rem;">Lihat Semua</a>
                 </div>
                 <div class="table-responsive" style="overflow-x: auto;">
                     <table class="table table-hover align-middle">
@@ -69,9 +69,11 @@
                                 <td>
                                     @php
                                         $st = strtoupper($o->status);
-                                        $bg = ['PENDING'=>'warning','DIPROSES'=>'info','SELESAI'=>'success','DIBATALKAN'=>'danger'][$st] ?? 'secondary';
+                                        $statusMap = ['PENDING'=>'PENDING','DIPROSES'=>'PROCESSING','SELESAI'=>'COMPLETED','DIBATALKAN'=>'CANCELLED'];
+                                        $displayStatus = $statusMap[$st] ?? $st;
+                                        $bg = ['PENDING'=>'warning','PROCESSING'=>'info','COMPLETED'=>'success','CANCELLED'=>'danger'][$displayStatus] ?? 'secondary';
                                     @endphp
-                                    <span class="badge bg-{{ $bg }}-subtle text-{{ $bg }} px-2 py-1" style="font-size: 0.6rem;">{{ $st }}</span>
+                                    <span class="badge bg-{{ $bg }}-subtle text-{{ $bg }} px-2 py-1" style="font-size: 0.6rem;">{{ $displayStatus }}</span>
                                 </td>
                                 <td>
                                     <div class="btn-group btn-group-sm">
@@ -88,7 +90,7 @@
                                                     @csrf @method('PATCH')
                                                     <input type="hidden" name="status" value="DIPROSES">
                                                     <button type="submit" class="dropdown-item">
-                                                        <i class="bi bi-gear me-1"></i> Proses
+                                                        <i class="bi bi-gear me-1"></i> Processing
                                                     </button>
                                                 </form>
                                             </li>
@@ -99,7 +101,7 @@
                                                     @csrf @method('PATCH')
                                                     <input type="hidden" name="status" value="SELESAI">
                                                     <button type="submit" class="dropdown-item">
-                                                        <i class="bi bi-check-circle me-1"></i> Selesai
+                                                        <i class="bi bi-check-circle me-1"></i> Completed
                                                     </button>
                                                 </form>
                                             </li>

@@ -7,8 +7,8 @@
             <i class="bi bi-arrow-left fs-5 text-dark"></i>
         </a>
         <div>
-            <h4 class="fw-bold text-dark mb-0">Rincian Pesanan #{{ $pesanan->id_pesanan ?? $pesanan->id }}</h4>
-            <p class="text-muted small mb-0">Dibuat pada {{ $pesanan->created_at->format('d M Y, H:i') }} WIB</p>
+            <h4 class="fw-bold text-dark mb-0" style="font-size: 1.25rem;">Rincian Pesanan ORD-{{ str_pad($pesanan->id, 3, '0', STR_PAD_LEFT) }}</h4>
+            <small class="text-muted mb-0" style="font-size: 0.75rem;">Dibuat pada {{ $pesanan->created_at->format('d M Y, H:i') }} WIB</small>
         </div>
     </div>
 
@@ -21,15 +21,15 @@
                     </div>
                     <div class="table-responsive">
                         <table class="table align-middle mb-0">
-                            <thead class="bg-light text-muted small">
-                                <tr>
+                            <thead class="bg-light text-muted">
+                                <tr style="font-size: 0.65rem;">
                                     <th class="ps-4">NAMA MENU</th>
                                     <th class="text-center">HARGA</th>
                                     <th class="text-center">QTY</th>
                                     <th class="text-end pe-4">SUBTOTAL</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody style="font-size: 0.75rem;">
                                 @php 
                                     // Decode data rincian menu
                                     $items = json_decode($pesanan->detail_menu, true); 
@@ -64,9 +64,9 @@
                                 @endif
                             </tbody>
                             <tfoot class="bg-light">
-                                <tr>
+                                <tr style="font-size: 0.75rem;">
                                     <td colspan="3" class="ps-4 fw-bold py-3 text-dark">Total Pembayaran</td>
-                                    <td class="text-end pe-4 fw-bold text-success fs-5 py-3">
+                                    <td class="text-end pe-4 fw-bold text-success py-3" style="font-size: 1rem;">
                                         Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}
                                     </td>
                                 </tr>
@@ -81,14 +81,14 @@
             {{-- Form Update Status --}}
             <div class="card border-0 shadow-sm mb-4" style="border-radius: 15px;">
                 <div class="card-body p-4">
-                    <h6 class="fw-bold mb-3 text-dark">Update Status</h6>
+                    <h6 class="fw-bold mb-3 text-dark" style="font-size: 0.9rem;">Update Status</h6>
                     <form action="{{ route('admin.pesanan.updateStatus', $pesanan->id) }}" method="POST">
                         @csrf @method('PATCH')
                         <select name="status" class="form-select border-0 bg-light mb-3">
                             <option value="PENDING" {{ $pesanan->status == 'PENDING' ? 'selected' : '' }}>Pending</option>
-                            <option value="DIPROSES" {{ $pesanan->status == 'DIPROSES' ? 'selected' : '' }}>Diproses</option>
-                            <option value="SELESAI" {{ $pesanan->status == 'SELESAI' ? 'selected' : '' }}>Selesai</option>
-                            <option value="DIBATALKAN" {{ $pesanan->status == 'DIBATALKAN' ? 'selected' : '' }}>Dibatalkan</option>
+                            <option value="DIPROSES" {{ $pesanan->status == 'DIPROSES' ? 'selected' : '' }}>Processing</option>
+                            <option value="SELESAI" {{ $pesanan->status == 'SELESAI' ? 'selected' : '' }}>Completed</option>
+                            <option value="DIBATALKAN" {{ $pesanan->status == 'DIBATALKAN' ? 'selected' : '' }}>Cancelled</option>
                         </select>
                         <button type="submit" class="btn btn-success w-100 fw-bold">Simpan Perubahan</button>
                     </form>

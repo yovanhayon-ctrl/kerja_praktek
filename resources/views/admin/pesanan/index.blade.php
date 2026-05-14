@@ -46,7 +46,7 @@
             <a href="{{ route('admin.pesanan.index', ['status' => 'semua']) }}" 
                class="btn btn-sm fw-bold px-3 {{ is_null($status) || $status === 'semua' ? 'btn-success' : 'btn-light text-dark' }}"
                style="border-radius: 6px; font-size: 0.8rem;">
-                Semua
+                All
             </a>
             <a href="{{ route('admin.pesanan.index', ['status' => 'pending']) }}" 
                class="btn btn-sm fw-bold px-3 {{ $status === 'pending' ? 'btn-success' : 'btn-light text-dark' }}"
@@ -56,17 +56,17 @@
             <a href="{{ route('admin.pesanan.index', ['status' => 'diproses']) }}" 
                class="btn btn-sm fw-bold px-3 {{ $status === 'diproses' ? 'btn-success' : 'btn-light text-dark' }}"
                style="border-radius: 6px; font-size: 0.8rem;">
-                Diproses
+                Processing
             </a>
             <a href="{{ route('admin.pesanan.index', ['status' => 'selesai']) }}" 
                class="btn btn-sm fw-bold px-3 {{ $status === 'selesai' ? 'btn-success' : 'btn-light text-dark' }}"
                style="border-radius: 6px; font-size: 0.8rem;">
-                Selesai
+                Completed
             </a>
             <a href="{{ route('admin.pesanan.index', ['status' => 'dibatalkan']) }}" 
                class="btn btn-sm fw-bold px-3 {{ $status === 'dibatalkan' ? 'btn-success' : 'btn-light text-dark' }}"
                style="border-radius: 6px; font-size: 0.8rem;">
-                Dibatalkan
+                Cancelled
             </a>
         </div>
         <form method="GET" action="{{ route('admin.pesanan.index') }}" class="d-flex gap-2">
@@ -130,15 +130,17 @@
                             </td>
                             <td>
                                 @php
-                                    $status = strtoupper($pesanan->status);
+                                    $st = strtoupper($pesanan->status);
+                                    $statusMap = ['PENDING'=>'PENDING','DIPROSES'=>'PROCESSING','SELESAI'=>'COMPLETED','DIBATALKAN'=>'CANCELLED'];
+                                    $displayStatus = $statusMap[$st] ?? $st;
                                     $badgeColor = [
-                                        'PENDING' => 'secondary',
-                                        'DIPROSES' => 'warning',
-                                        'SELESAI' => 'success',
-                                        'DIBATALKAN' => 'danger'
-                                    ][$status] ?? 'secondary';
+                                        'PENDING' => 'warning',
+                                        'PROCESSING' => 'info',
+                                        'COMPLETED' => 'success',
+                                        'CANCELLED' => 'danger'
+                                    ][$displayStatus] ?? 'secondary';
                                 @endphp
-                                <span class="badge bg-{{ $badgeColor }}" style="font-size: 0.6rem;">{{ $status }}</span>
+                                <span class="badge bg-{{ $badgeColor }}-subtle text-{{ $badgeColor }} px-2 py-1" style="font-size: 0.6rem;">{{ $displayStatus }}</span>
                             </td>
                             <td class="text-center">
                                 <div class="d-flex gap-1 justify-content-center">
@@ -157,7 +159,7 @@
                                                     @csrf @method('PATCH')
                                                     <input type="hidden" name="status" value="DIPROSES">
                                                     <button type="submit" class="dropdown-item">
-                                                        <i class="bi bi-gear me-2"></i> Diproses
+                                                        <i class="bi bi-gear me-2"></i> Processing
                                                     </button>
                                                 </form>
                                             </li>
@@ -168,7 +170,7 @@
                                                     @csrf @method('PATCH')
                                                     <input type="hidden" name="status" value="SELESAI">
                                                     <button type="submit" class="dropdown-item">
-                                                        <i class="bi bi-check-circle me-2"></i> Selesai
+                                                        <i class="bi bi-check-circle me-2"></i> Completed
                                                     </button>
                                                 </form>
                                             </li>
@@ -178,7 +180,7 @@
                                                     @csrf @method('PATCH')
                                                     <input type="hidden" name="status" value="DIBATALKAN">
                                                     <button type="submit" class="dropdown-item text-danger">
-                                                        <i class="bi bi-x-circle me-2"></i> Batalkan
+                                                        <i class="bi bi-x-circle me-2"></i> Cancelled
                                                     </button>
                                                 </form>
                                             </li>
@@ -211,7 +213,7 @@
                             </li>
                         @else
                             <li class="page-item">
-                                <a class="page-link" href="{{ $pesanans->previousPageUrl() }}{{ $search ? '&search=' . $search : '' }}{{ $status ? '&status=' . $status : '' }}">« Previous</a>
+                                <a class="page-link" href="{{ $pesanans->appends(request()->query())->previousPageUrl() }}">« Previous</a>
                             </li>
                         @endif
 
@@ -223,7 +225,7 @@
                                 </li>
                             @else
                                 <li class="page-item">
-                                    <a class="page-link" href="{{ $url }}{{ $search ? '&search=' . $search : '' }}{{ $status ? '&status=' . $status : '' }}">{{ $page }}</a>
+                                    <a class="page-link" href="{{ $pesanans->appends(request()->query())->url($page) }}">{{ $page }}</a>
                                 </li>
                             @endif
                         @endforeach
@@ -231,7 +233,7 @@
                         {{-- Next Link --}}
                         @if($pesanans->hasMorePages())
                             <li class="page-item">
-                                <a class="page-link" href="{{ $pesanans->nextPageUrl() }}{{ $search ? '&search=' . $search : '' }}{{ $status ? '&status=' . $status : '' }}">Next »</a>
+                                <a class="page-link" href="{{ $pesanans->appends(request()->query())->nextPageUrl() }}">Next »</a>
                             </li>
                         @else
                             <li class="page-item disabled">
