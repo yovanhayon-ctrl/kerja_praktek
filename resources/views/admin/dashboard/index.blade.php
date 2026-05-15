@@ -8,9 +8,9 @@
             <h4 class="fw-bold mb-0" style="font-size: 1.25rem;">Dashboard</h4>
             <small class="text-muted" style="font-size: 0.75rem;">Overview performa restoran hari ini</small>
         </div>
-        <button class="btn btn-success px-3 py-2 fw-bold shadow-sm" style="border-radius: 8px; font-size: 0.8rem;">
+        {{-- <button class="btn btn-success px-3 py-2 fw-bold shadow-sm" style="border-radius: 8px; font-size: 0.8rem;">
             <i class="bi bi-plus-lg me-1"></i> Pesanan Baru
-        </button>
+        </button> --}}
     </div>
 
     {{-- 4 Card Utama (Statistik) --}}
@@ -146,9 +146,9 @@
                 </div>
 
                 {{-- Tombol Unduh Laporan --}}
-                <button class="btn btn-dark w-100 py-2 mt-4 fw-bold" style="border-radius: 10px; font-size: 0.75rem;">
+                {{-- <button class="btn btn-dark w-100 py-2 mt-4 fw-bold" style="border-radius: 10px; font-size: 0.75rem;">
                     <i class="bi bi-download me-2"></i> Unduh Laporan
-                </button>
+                </button> --}}
             </div>
         </div>
     </div>

@@ -102,8 +102,13 @@
                     <tbody style="font-size: 0.75rem;">
                         @forelse($pesanans as $pesanan)
                         <tr>
-                            <td class="ps-4 fw-bold">
+                            {{-- ID PESANAN Sebelumnya --}}
+                            {{-- <td class="ps-4 fw-bold">
                                 ORD-{{ str_pad($total_orders_count - $loop->index + 1, 3, '0', STR_PAD_LEFT) }}
+                            </td> --}}
+                            {{-- SESUDAH (benar — pakai id langsung dari database) --}}
+                            <td class="ps-4 fw-bold">
+                                ORD-{{ str_pad($pesanan->id, 3, '0', STR_PAD_LEFT) }}
                             </td>
                             <td class="fw-bold">{{ $pesanan->nama_pelanggan ?? 'Tanpa Nama' }}</td>
                             <td>Meja {{ $pesanan->nomor_meja ?? '-' }}</td>
@@ -199,51 +204,82 @@
             </div>
 
             {{-- Pagination --}}
+            {{-- Pagination --}}
             @if($pesanans->hasPages())
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <small class="text-muted">
                     Menampilkan {{ $pesanans->firstItem() }} - {{ $pesanans->lastItem() }} dari {{ $total_pesanan }} pesanan
                 </small>
                 <nav>
-                    <ul class="pagination pagination-sm mb-0">
+                    <ul class="pagination pagination-sm mb-0 align-items-center">
                         {{-- Previous Link --}}
                         @if($pesanans->onFirstPage())
                             <li class="page-item disabled">
-                                <span class="page-link">« Previous</span>
+                                <span class="page-link border-0 shadow-sm rounded-3 me-2 d-flex align-items-center justify-content-center" 
+                                    style="width: 32px; height: 32px; background: #f8fafc; color: #ccc;">
+                                    <i class="bi bi-chevron-left"></i>
+                                </span>
                             </li>
                         @else
                             <li class="page-item">
-                                <a class="page-link" href="{{ $pesanans->appends(request()->query())->previousPageUrl() }}">« Previous</a>
+                                <a class="page-link border-0 shadow-sm rounded-3 me-2 d-flex align-items-center justify-content-center text-dark" 
+                                style="width: 32px; height: 32px; background: #fff;" 
+                                href="{{ $pesanans->appends(request()->query())->previousPageUrl() }}">
+                                    <i class="bi bi-chevron-left"></i>
+                                </a>
                             </li>
                         @endif
 
-                        {{-- Page Links --}}
-                        @foreach($pesanans->getUrlRange(1, $pesanans->lastPage()) as $page => $url)
-                            @if($page == $pesanans->currentPage())
-                                <li class="page-item active">
-                                    <span class="page-link">{{ $page }}</span>
-                                </li>
-                            @else
-                                <li class="page-item">
-                                    <a class="page-link" href="{{ $pesanans->appends(request()->query())->url($page) }}">{{ $page }}</a>
-                                </li>
-                            @endif
+                        {{-- Logika Sliding Pagination (Tampilkan 3 angka saja) --}}
+                        @php
+                            $currentPage = $pesanans->currentPage();
+                            $lastPage = $pesanans->lastPage();
+
+                            // Menentukan titik mulai: 
+                            // Jika di halaman 1 atau 2, mulai dari 1. 
+                            // Jika sudah di halaman 3 atau lebih, angka mulai bergeser (sliding)
+                            $start = max(1, $currentPage - 1);
+                            
+                            // Pastikan jika di halaman akhir, range tetap konsisten tampil 3 angka
+                            if ($lastPage - $start < 2) {
+                                $start = max(1, $lastPage - 2);
+                            }
+
+                            // Tampilkan maksimal 3 angka saja
+                            $end = min($start + 2, $lastPage);
+                        @endphp
+
+                        @foreach ($pesanans->getUrlRange($start, $end) as $page => $url)
+                            <li class="page-item">
+                                <a class="page-link border-0 mx-1 rounded-3 d-flex align-items-center justify-content-center {{ $page == $currentPage ? 'bg-success text-white' : 'text-dark bg-transparent' }}" 
+                                style="width: 32px; height: 32px; transition: all 0.2s;" 
+                                href="{{ $pesanans->appends(request()->query())->url($page) }}">
+                                    {{ $page }}
+                                </a>
+                            </li>
                         @endforeach
 
                         {{-- Next Link --}}
                         @if($pesanans->hasMorePages())
                             <li class="page-item">
-                                <a class="page-link" href="{{ $pesanans->appends(request()->query())->nextPageUrl() }}">Next »</a>
+                                <a class="page-link border-0 shadow-sm rounded-3 ms-2 d-flex align-items-center justify-content-center text-dark" 
+                                style="width: 32px; height: 32px; background: #fff;" 
+                                href="{{ $pesanans->appends(request()->query())->nextPageUrl() }}">
+                                    <i class="bi bi-chevron-right"></i>
+                                </a>
                             </li>
                         @else
                             <li class="page-item disabled">
-                                <span class="page-link">Next »</span>
+                                <span class="page-link border-0 shadow-sm rounded-3 ms-2 d-flex align-items-center justify-content-center" 
+                                    style="width: 32px; height: 32px; background: #f8fafc; color: #ccc;">
+                                    <i class="bi bi-chevron-right"></i>
+                                </span>
                             </li>
                         @endif
                     </ul>
                 </nav>
             </div>
-            @endif
+        @endif
         </div>
     </div>
 </div>
