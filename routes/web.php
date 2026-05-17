@@ -41,6 +41,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::patch('/menu/{id}/toggle', [AdminMenuController::class, 'toggleStatus'])->name('menu.toggle');
     
     // DATA PESANAN
+    Route::get('/pesanan/export', [AdminPesananController::class, 'export'])->name('pesanan.export'); // <-- TAMBAHKAN BARIS INI
     Route::get('/pesanan', [AdminPesananController::class, 'index'])->name('pesanan.index');
     Route::get('/pesanan/detail/{id}', [AdminPesananController::class, 'show'])->name('pesanan.show');
     Route::patch('/pesanan/{id}/status', [AdminPesananController::class, 'updateStatus'])->name('pesanan.updateStatus');

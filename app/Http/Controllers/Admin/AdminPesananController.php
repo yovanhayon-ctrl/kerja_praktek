@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Pesanan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Exports\PesananExport;          // <-- TAMBAHAN: Import class Export
+use Maatwebsite\Excel\Facades\Excel;    // <-- TAMBAHAN: Import Facade Excel
 
 class AdminPesananController extends Controller
 {
@@ -69,5 +71,17 @@ class AdminPesananController extends Controller
         $pesanan->save();
 
         return back()->with('success', 'Status pesanan berhasil diperbarui!');
+    }
+
+    // --- TAMBAHAN METHOD BARU UNTUK EXPORT EXCEL ---
+    public function export(Request $request)
+    {
+        $status = $request->query('status', null);
+        $search = $request->query('search', null);
+        
+        // Nama file unduhan otomatis mengikuti tanggal & jam saat tombol diklik
+        $namaFile = 'data_pesanan_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+        return Excel::download(new PesananExport($status, $search), $namaFile);
     }
 }

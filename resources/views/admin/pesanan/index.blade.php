@@ -7,9 +7,9 @@
         <div>
             <h4 class="fw-bold mb-0" style="font-size: 1.25rem;">Data Pesanan</h4>
         </div>
-        <button class="btn btn-dark px-3 fw-bold" style="border-radius: 8px; font-size: 0.8rem;">
+        <a href="{{ route('admin.pesanan.export', ['status' => $status, 'search' => $search ?? '']) }}" class="btn btn-dark px-3 fw-bold" style="border-radius: 8px; font-size: 0.8rem;">
             <i class="bi bi-download me-2"></i> Export to Excel
-        </button>
+        </a>
     </div>
 
     {{-- 4 Card Statistik --}}
