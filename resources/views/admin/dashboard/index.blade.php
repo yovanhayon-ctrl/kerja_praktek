@@ -61,7 +61,7 @@
                         <tbody style="font-size: 0.75rem;">
                             @forelse($recent_orders as $o)
                             <tr>
-                                <td class="fw-bold">ORD-{{ str_pad($total_orders_count - $loop->index + 1, 3, '0', STR_PAD_LEFT) }}</td>
+                                <td class="fw-bold">ORD-{{ str_pad($o->id, 3, '0', STR_PAD_LEFT) }}</td>
                                 <td>{{ $o->nama_pelanggan }}</td>
                                 <td>{{ $o->nomor_meja ?? '-' }}</td>
                                 <td><small class="text-muted">{{ $o->catatan ? Str::limit($o->catatan, 20) : '-' }}</small></td>

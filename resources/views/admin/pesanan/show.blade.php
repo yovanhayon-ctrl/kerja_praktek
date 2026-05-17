@@ -25,6 +25,7 @@
                                 <tr style="font-size: 0.65rem;">
                                     <th class="ps-4">NAMA MENU</th>
                                     <th class="text-center">HARGA</th>
+                                    <th class="text-center">CATATAN</th>
                                     <th class="text-center">QTY</th>
                                     <th class="text-end pe-4">SUBTOTAL</th>
                                 </tr>
@@ -38,17 +39,25 @@
                                 @if(!empty($items))
                                     @foreach($items as $item)
                                     <tr>
-                                        <td class="ps-4">
+                                        <td class="ps-4 fw-medium text-dark">
                                             {{-- Cek semua kemungkinan key JSON: nama, nama_menu, atau name --}}
                                             {{ $item['nama'] ?? $item['nama_menu'] ?? $item['name'] ?? 'Menu Tidak Diketahui' }}
                                         </td>
                                         <td class="text-center">
                                             Rp {{ number_format($item['harga'] ?? $item['price'] ?? 0, 0, ',', '.') }}
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-center text-secondary">
+                                            {{-- MODIFIKASI: Menampilkan catatan sebagai teks biasa yang serasi dengan nama dan harga menu --}}
+                                            @if(!empty($pesanan->catatan) && $pesanan->catatan !== '-')
+                                                {{ $pesanan->catatan }}
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+                                        <td class="text-center fw-bold">
                                             {{ $item['qty'] ?? $item['jumlah'] ?? $item['quantity'] ?? 0 }}
                                         </td>
-                                        <td class="text-end pe-4">
+                                        <td class="text-end pe-4 fw-bold">
                                             @php
                                                 $harga = $item['harga'] ?? $item['price'] ?? 0;
                                                 $qty = $item['qty'] ?? $item['jumlah'] ?? $item['quantity'] ?? 0;
@@ -59,13 +68,13 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <td colspan="4" class="text-center py-4 text-muted">Rincian menu tidak ditemukan dalam database.</td>
+                                        <td colspan="5" class="text-center py-4 text-muted">Rincian menu tidak ditemukan dalam database.</td>
                                     </tr>
                                 @endif
                             </tbody>
                             <tfoot class="bg-light">
                                 <tr style="font-size: 0.75rem;">
-                                    <td colspan="3" class="ps-4 fw-bold py-3 text-dark">Total Pembayaran</td>
+                                    <td colspan="4" class="ps-4 fw-bold py-3 text-dark">Total Pembayaran</td>
                                     <td class="text-end pe-4 fw-bold text-success py-3" style="font-size: 1rem;">
                                         Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}
                                     </td>

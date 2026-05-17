@@ -38,7 +38,7 @@
                     <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
                         <div>
                             <h6 class="fw-bold mb-1">
-                                <i class="bi bi-receipt text-danger me-1"></i> Pesanan ORD-{{ str_pad($total_orders_count - $loop->index + 1, 3, '0', STR_PAD_LEFT) }}
+                                <i class="bi bi-receipt me-1" style="color:#4ade80;"></i> Pesanan ORD-{{ str_pad($pesanan->id, 3, '0', STR_PAD_LEFT) }}
                             </h6>
                             <small class="text-muted">
                                 {{ $pesanan->created_at->format('d M Y, H:i') }} WIB

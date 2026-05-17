@@ -13,8 +13,6 @@ class RiwayatController extends Controller
                            ->latest()
                            ->paginate(5);
 
-        $total_orders_count = Pesanan::count();
-
-        return view('riwayat.index', compact('pesanans', 'total_orders_count'));
+        return view('riwayat.index', compact('pesanans'));
     }
 }
