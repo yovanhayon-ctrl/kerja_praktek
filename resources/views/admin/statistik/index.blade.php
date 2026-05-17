@@ -3,59 +3,70 @@
 @section('content')
 <div class="container-fluid py-4">
     <div class="mb-4">
-        <h2 class="fw-bold text-dark">Statistik Restoran</h2>
-        <p class="text-muted">Analisis performa bisnis dan penjualan RM Saung Tiga</p>
+        <h4 class="fw-bold mb-0" style="font-size: 1.25rem;">Statistik Restoran</h4>
+        <small class="text-muted" style="font-size: 0.75rem;">Analisis performa bisnis dan penjualan RM Saung Tiga</small>
     </div>
 
     <div class="row g-3 mb-4">
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm p-3 bg-white" style="border-radius: 12px;">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <span class="text-muted small d-block mb-1">Total Pendapatan</span>
-                        <h4 class="fw-bold mb-0 text-success">Rp {{ number_format($total_pendapatan, 0, ',', '.') }}</h4>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100" style="border-radius: 12px; border-left: 4px solid #198754 !important;">
+                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div class="p-2 rounded-3" style="background: #f8fafc; color: #198754;">
+                            <i class="bi bi-wallet2 fs-5"></i>
+                        </div>
                     </div>
-                    <div class="p-3 bg-success bg-opacity-10 text-success rounded-3">
-                        <i class="bi bi-wallet2 fs-4"></i>
+                    <div>
+                        <small class="text-muted fw-bold d-block mb-1" style="font-size: 0.6rem; letter-spacing: 0.5px;">TOTAL PENDAPATAN</small>
+                        <h5 class="fw-bold mb-0" style="font-size: 1.05rem; color: #1e293b;">Rp {{ number_format($total_pendapatan, 0, ',', '.') }}</h5>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm p-3 bg-white" style="border-radius: 12px;">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <span class="text-muted small d-block mb-1">Total Pesanan</span>
-                        <h4 class="fw-bold mb-0 text-dark">{{ $total_pesanan }} Pesanan</h4>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100" style="border-radius: 12px; border-left: 4px solid #3b82f6 !important;">
+                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div class="p-2 rounded-3" style="background: #f8fafc; color: #3b82f6;">
+                            <i class="bi bi-bag-check fs-5"></i>
+                        </div>
                     </div>
-                    <div class="p-3 bg-primary bg-opacity-10 text-primary rounded-3">
-                        <i class="bi bi-bag-check fs-4"></i>
+                    <div>
+                        <small class="text-muted fw-bold d-block mb-1" style="font-size: 0.6rem; letter-spacing: 0.5px;">TOTAL PESANAN</small>
+                        <h5 class="fw-bold mb-0" style="font-size: 1.05rem; color: #1e293b;">{{ $total_pesanan }} Pesanan</h5>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm p-3 bg-white" style="border-radius: 12px;">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <span class="text-muted small d-block mb-1">Varian Menu</span>
-                        <h4 class="fw-bold mb-0 text-dark">{{ $total_menu }} Menu</h4>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100" style="border-radius: 12px; border-left: 4px solid #fbbf24 !important;">
+                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div class="p-2 rounded-3" style="background: #f8fafc; color: #fbbf24;">
+                            <i class="bi bi-egg-fried fs-5"></i>
+                        </div>
                     </div>
-                    <div class="p-3 bg-warning bg-opacity-10 text-warning rounded-3">
-                        <i class="bi bi-egg-fried fs-4"></i>
+                    <div>
+                        <small class="text-muted fw-bold d-block mb-1" style="font-size: 0.6rem; letter-spacing: 0.5px;">VARIAN MENU</small>
+                        <h5 class="fw-bold mb-0" style="font-size: 1.05rem; color: #1e293b;">{{ $total_menu }} Menu</h5>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm p-3 bg-white" style="border-radius: 12px;">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <span class="text-muted small d-block mb-1">Rata-rata Pelayanan</span>
-                        <h4 class="fw-bold mb-0 text-dark">{{ $rata_waktu_tunggu }} Menit</h4>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100" style="border-radius: 12px; border-left: 4px solid #a855f7 !important;">
+                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div class="p-2 rounded-3" style="background: #f8fafc; color: #a855f7;">
+                            <i class="bi bi-hourglass-split fs-5"></i>
+                        </div>
                     </div>
-                    <div class="p-3 bg-info bg-opacity-10 text-info rounded-3">
-                        <i class="bi bi-hourglass-split fs-4"></i>
+                    <div>
+                        <small class="text-muted fw-bold d-block mb-1" style="font-size: 0.6rem; letter-spacing: 0.5px;">RATA-RATA PELAYANAN</small>
+                        <h5 class="fw-bold mb-0" style="font-size: 1.05rem; color: #1e293b;">{{ $rata_waktu_tunggu }} Menit</h5>
                     </div>
                 </div>
             </div>
@@ -65,7 +76,7 @@
     <div class="row g-4">
         <div class="col-lg-7">
             <div class="card border-0 shadow-sm p-4 bg-white" style="border-radius: 16px;">
-                <h5 class="fw-bold text-dark mb-3"><i class="bi bi-graph-up-arrow me-2 text-success"></i>Tren Pendapatan (7 Hari Terakhir)</h5>
+                <h6 class="fw-bold mb-3" style="font-size: 0.9rem;"><i class="bi bi-graph-up-arrow me-2 text-success"></i>Tren Pendapatan (7 Hari Terakhir)</h6>
                 <div style="position: relative; height:300px;">
                     <canvas id="chartPendapatan"></canvas>
                 </div>
@@ -74,31 +85,31 @@
 
         <div class="col-lg-5">
             <div class="card border-0 shadow-sm p-4 bg-white" style="border-radius: 16px; height: 100%;">
-                <h5 class="fw-bold text-dark mb-3"><i class="bi bi-fire me-2 text-danger"></i>5 Menu Terlaris (Top Selling)</h5>
+                <h6 class="fw-bold mb-3" style="font-size: 0.9rem;"><i class="bi bi-fire me-2 text-danger"></i>5 Menu Terlaris (Top Selling)</h6>
                 
                 @if($menu_terlaris->isEmpty())
                     <div class="text-center py-5">
                         <i class="bi bi-inbox text-muted fs-2"></i>
-                        <p class="text-muted mt-2">Belum ada data penjualan selesai.</p>
+                        <p class="text-muted mt-2" style="font-size: 0.75rem;">Belum ada data penjualan selesai.</p>
                     </div>
                 @else
                     <div class="table-responsive">
                         <table class="table table-borderless align-middle mb-0">
                             <thead>
-                                <tr class="text-muted small">
+                                <tr class="text-muted" style="font-size: 0.65rem;">
                                     <th>NAMA MENU</th>
                                     <th class="text-center">TERJUAL</th>
                                     <th class="text-end">TOTAL OMSET</th>
                                 </tr>
-                            </thead>
-                            <tbody>
+                             Clyde </thead>
+                            <tbody style="font-size: 0.75rem;">
                                 @foreach($menu_terlaris as $menu)
                                 <tr>
                                     <td>
                                         <span class="fw-bold text-dark d-block">{{ $menu['nama_menu'] }}</span>
                                     </td>
                                     <td class="text-center">
-                                        <span class="badge bg-danger bg-opacity-10 text-danger px-2.5 py-1.5 fw-bold rounded-pill">
+                                        <span class="badge bg-danger bg-opacity-10 text-danger px-2 py-1 fw-bold rounded-pill" style="font-size: 0.6rem;">
                                             {{ $menu['total_terjual'] }}x
                                         </span>
                                     </td>
@@ -150,6 +161,7 @@
                     y: {
                         beginAtZero: true,
                         ticks: {
+                            stepSize: 500000, 
                             callback: function(value) {
                                 return 'Rp ' + value.toLocaleString('id-ID');
                             }

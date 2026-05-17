@@ -12,8 +12,8 @@ class StatistikController extends Controller
 {
     public function index()
     {
-        // 1. Ringkasan Data (Cards)
-        $total_pendapatan = Pesanan::where('status', 'SELESAI')->sum('total_harga');
+        // 1. Ringkasan Data (Cards) - Diubah menjadi menghitung semua pendapatan tanpa filter status selesai
+        $total_pendapatan = Pesanan::sum('total_harga'); 
         $total_pesanan = Pesanan::count();
         $total_menu = Menu::count();
 
@@ -28,13 +28,13 @@ class StatistikController extends Controller
         // 2. Data Grafik Pendapatan 7 Hari Terakhir
         $grafik_pendapatan = [];
         $grafik_label = [];
-        
+
         for ($i = 6; $i >= 0; $i--) {
             $date = Carbon::now()->subDays($i);
             $grafik_label[] = $date->translatedFormat('d M');
             
-            $pendapatan_harian = Pesanan::where('status', 'SELESAI')
-                ->whereDate('created_at', $date->toDateString())
+            // Diubah juga agar grafik mencatat seluruh omset harian yang masuk
+            $pendapatan_harian = Pesanan::whereDate('created_at', $date->toDateString())
                 ->sum('total_harga');
                 
             $grafik_pendapatan[] = $pendapatan_harian;
