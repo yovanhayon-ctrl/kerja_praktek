@@ -200,13 +200,13 @@
             <p>@yield('page-subtitle', 'Overview performa restoran hari ini')</p>
         </div>
         <div class="topbar-right">
-            <button class="topbar-icon position-relative">
+            <a href="{{ route('admin.pesanan.index') }}" class="topbar-icon position-relative text-decoration-none">
                 <i class="bi bi-bell"></i>
                 @if($pendingCount > 0)
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                      style="font-size:0.55rem;">{{ $pendingCount }}</span>
+                    style="font-size:0.55rem;">{{ $pendingCount }}</span>
                 @endif
-            </button>
+            </a>
             <button class="topbar-icon">
                 <i class="bi bi-gear"></i>
             </button>
