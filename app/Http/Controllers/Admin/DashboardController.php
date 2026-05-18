@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Menu;
 use App\Models\Pesanan;
 use App\Models\DetailPesanan;
+use App\Models\User; // Ditambahkan untuk manipulasi data model User/Admin
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash; // Ditambahkan untuk mengenkripsi password baru
 use Illuminate\Http\Request; 
 use Carbon\Carbon;
 
@@ -26,7 +28,6 @@ class DashboardController extends Controller
             ->orderByDesc('total_qty')
             ->first()?->nama_menu ?? '-';
 
-        // Menggunakan 'nama_pelanggan' sesuai kolom database Anda
         $total_pelanggan = Pesanan::distinct('nama_pelanggan')->count('nama_pelanggan');
 
         // 2. LOGIKA PERSENTASE KENAIKAN
@@ -57,7 +58,7 @@ class DashboardController extends Controller
         
         $jumlah_pesanan_hari_ini = $pesanan_hari_ini;
 
-        // 5. TABEL PESANAN TERBARU (Pastikan mengambil kolom yang diperlukan)
+        // 5. TABEL PESANAN TERBARU
         $recent_orders = Pesanan::latest()->take(5)->get();
 
         // 6. GET TOTAL ORDERS FOR SEQUENTIAL NUMBERING
@@ -72,7 +73,7 @@ class DashboardController extends Controller
 
     public function login(Request $request)
     {
-        // Validasi input
+        // Validasi input login
         $credentials = $request->validate([
             'email'    => 'required|email',
             'password' => 'required|min:6',
@@ -93,5 +94,37 @@ class DashboardController extends Controller
         return back()->withErrors([
             'email' => 'Email atau password salah.',
         ])->onlyInput('email');
+    }
+
+    /**
+     * Fitur Reset Password Langsung dari Form Modal Login (Keperluan Kerja Praktek)
+     */
+    public function resetPasswordDirect(Request $request)
+    {
+        // 1. Jalankan Validasi Input Form
+        $request->validate([
+            'reset_email'  => 'required|email',
+            'new_password' => 'required|min:6|confirmed', // 'confirmed' otomatis mengecek kecocokan input 'new_password_confirmation'
+        ], [
+            'reset_email.required'   => 'Email admin wajib diisi.',
+            'new_password.required'  => 'Password baru tidak boleh kosong.',
+            'new_password.min'       => 'Sandi baru minimal harus 6 karakter.',
+            'new_password.confirmed' => 'Konfirmasi password baru tidak sesuai.',
+        ]);
+
+        // 2. Cari Akun Admin Berdasarkan Input Email
+        $admin = User::where('email', $request->reset_email)->first();
+
+        // Jika email admin tidak terdaftar di DB
+        if (!$admin) {
+            return redirect()->back()->withErrors(['email' => 'Email admin tidak terdaftar di sistem kami.']);
+        }
+
+        // 3. Update sandi baru dan enkripsi ke Database menggunakan Bcrypt/Hash
+        $admin->password = Hash::make($request->new_password);
+        $admin->save();
+
+        // 4. Redirect kembali ke login dengan session alert sukses
+        return redirect()->route('login')->with('success_reset', 'Sandi baru berhasil disimpan! Silakan mencoba login kembali.');
     }
 }

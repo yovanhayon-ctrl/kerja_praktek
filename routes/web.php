@@ -45,6 +45,9 @@ Route::post('/kirim-pesan', [PesanController::class, 'store'])->name('pesan.stor
 Route::get('/login', function () { return view('admin.login'); })->name('login');
 Route::post('/login', [DashboardController::class, 'login'])->name('login.post'); 
 
+// Rute Tambahan Eksekusi Ganti Password Baru dari Modal Form Login
+Route::post('/login/reset-password', [DashboardController::class, 'resetPasswordDirect'])->name('admin.password.reset_direct');
+
 
 //         ===== RUTE ADMIN PANEL (SECURE AUTH) =====
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
