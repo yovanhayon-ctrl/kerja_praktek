@@ -184,7 +184,7 @@
                 @endif
 
                 <div class="card border-0 shadow-sm p-4">
-                    <form action="{{ url('/tentang/kirim') }}" method="POST">
+                    <form action="{{ route('pesan.store') }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Nama</label>

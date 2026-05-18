@@ -112,9 +112,10 @@
 </head>
 <body>
 
-{{-- Menghitung Pesanan dengan status kapital PENDING --}}
+{{-- Menghitung Pesanan Pending & Pesan yang Belum Dibaca --}}
 @php 
     $pendingCount = \App\Models\Pesanan::where('status', 'PENDING')->count(); 
+    $unreadMessages = \App\Models\Pesan::where('status', 'BELUM_DIBACA')->count();
 @endphp
 
 {{-- SIDEBAR --}}
@@ -160,9 +161,18 @@
             <i class="bi bi-bar-chart-line"></i> Statistik
         </a>
 
+        <a href="{{ route('admin.pesan.index') }}"
+           class="sidebar-link {{ request()->routeIs('admin.pesan.*') ? 'active' : '' }}">
+            <i class="bi bi-envelope"></i> Pesan Masuk
+            @if($unreadMessages > 0)
+            <span class="ms-auto badge rounded-pill bg-danger" style="color:#fff; font-size:0.65rem;">
+                {{ $unreadMessages }}
+            </span>
+            @endif
+        </a>
+
         <div class="sidebar-label mt-2">Settings</div>
 
-        {{-- PERBAIKAN: Menggunakan admin.manajemen.index sesuai web.php --}}
         <a href="{{ route('admin.manajemen_admin.index') }}"
            class="sidebar-link {{ request()->routeIs('admin.manajemen_admin.*') ? 'active' : '' }}">
             <i class="bi bi-people"></i> Manajemen Admin
@@ -172,7 +182,6 @@
 
     <div class="sidebar-footer">
         <div class="d-flex align-items-center gap-2 px-2 mb-3">
-            {{-- Mengambil inisial nama secara otomatis --}}
             <div class="admin-avatar" style="width:32px; height:32px; font-size:0.75rem;">
                 {{ substr(Auth::user()->name ?? 'A', 0, 1) }}
             </div>
@@ -200,6 +209,7 @@
             <p>@yield('page-subtitle', 'Overview performa restoran hari ini')</p>
         </div>
         <div class="topbar-right">
+            {{-- Lonceng khusus untuk memantau data pesanan masuk makanan --}}
             <a href="{{ route('admin.pesanan.index') }}" class="topbar-icon position-relative text-decoration-none">
                 <i class="bi bi-bell"></i>
                 @if($pendingCount > 0)
@@ -207,6 +217,16 @@
                     style="font-size:0.55rem;">{{ $pendingCount }}</span>
                 @endif
             </a>
+
+            {{-- Pesan Masuk --}}
+            <a href="{{ route('admin.pesan.index') }}" class="topbar-icon position-relative text-decoration-none">
+                <i class="bi bi-envelope"></i>
+                @if($unreadMessages > 0)
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                    style="font-size:0.55rem;">{{ $unreadMessages }}</span>
+                @endif
+            
+            {{-- Shortcut ikon orang langsung ke Manajemen Akun Admin --}}
             <a href="{{ route('admin.manajemen_admin.index') }}" class="topbar-icon text-decoration-none">
                 <i class="bi bi-person"></i>
             </a>
