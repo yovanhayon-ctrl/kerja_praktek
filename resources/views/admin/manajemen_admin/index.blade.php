@@ -125,7 +125,7 @@
                         <label class="form-label text-muted fw-semibold" style="font-size: 0.65rem;">FULL NAME</label>
                         <div class="input-group input-group-sm">
                             <span class="input-group-text bg-light border-end-0 text-muted" style="border-radius: 8px 0 0 8px;"><i class="bi bi-person"></i></span>
-                            <input type="text" name="name" class="form-control bg-light border-start-0" placeholder="e.g. John Doe" style="border-radius: 0 8px 8px 0; font-size: 0.75rem;" required>
+                            <input type="text" name="name" class="form-control bg-light border-start-0" placeholder="Admin / User" style="border-radius: 0 8px 8px 0; font-size: 0.75rem;" required>
                         </div>
                     </div>
 
@@ -133,7 +133,7 @@
                         <label class="form-label text-muted fw-semibold" style="font-size: 0.65rem;">EMAIL ADDRESS</label>
                         <div class="input-group input-group-sm">
                             <span class="input-group-text bg-light border-end-0 text-muted" style="border-radius: 8px 0 0 8px;"><i class="bi bi-envelope"></i></span>
-                            <input type="email" name="email" class="form-control bg-light border-start-0" placeholder="john@rmsaungtiga.com" style="border-radius: 0 8px 8px 0; font-size: 0.75rem;" required>
+                            <input type="email" name="email" class="form-control bg-light border-start-0" placeholder="admin@rmsaungtiga.com" style="border-radius: 0 8px 8px 0; font-size: 0.75rem;" required>
                         </div>
                     </div>
 
