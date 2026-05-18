@@ -26,9 +26,6 @@ Route::get('/tentang', function () { return view('tentang.index'); })->name('ten
 
 // --- RUTE LOGIN/LOGOUT ---
 Route::get('/login', function () { return view('admin.login'); })->name('login');
-
-// PASTIKAN: Di DashboardController harus ada method bernama 'authenticate' atau 'login'
-// Jika Anda menggunakan Auth bawaan Laravel, biasanya ini lari ke LoginController
 Route::post('/login', [DashboardController::class, 'login'])->name('login.post'); 
 
 // --- RUTE ADMIN PANEL (DILINDUNGI AUTH) ---
@@ -41,17 +38,20 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::patch('/menu/{id}/toggle', [AdminMenuController::class, 'toggleStatus'])->name('menu.toggle');
     
     // DATA PESANAN
-    Route::get('/pesanan/export', [AdminPesananController::class, 'export'])->name('pesanan.export'); // <-- TAMBAHKAN BARIS INI
+    Route::get('/pesanan/export', [AdminPesananController::class, 'export'])->name('pesanan.export'); 
     Route::get('/pesanan', [AdminPesananController::class, 'index'])->name('pesanan.index');
     Route::get('/pesanan/detail/{id}', [AdminPesananController::class, 'show'])->name('pesanan.show');
     Route::patch('/pesanan/{id}/status', [AdminPesananController::class, 'updateStatus'])->name('pesanan.updateStatus');
     
-    // Statistik & Manajemen Admin
+    // Statistik
     Route::get('/statistik', [StatistikController::class, 'index'])->name('statistik');
     
-    // PERBAIKAN: Nama route disesuaikan agar tidak bentrok (admin.manajemen)
-    Route::get('/manajemen-admin', [ManajemenAdminController::class, 'index'])->name('manajemen.index');
+    // --- PERBAIKAN: Manajemen Admin (Menggunakan underscore agar sinkron dengan View & Sidebar) ---
+    Route::get('/manajemen-admin', [ManajemenAdminController::class, 'index'])->name('manajemen_admin.index');
+    Route::post('/manajemen-admin', [ManajemenAdminController::class, 'store'])->name('manajemen_admin.store');
+    Route::delete('/manajemen-admin/{id}', [ManajemenAdminController::class, 'destroy'])->name('manajemen_admin.destroy');
 
+    // Logout
     Route::post('/logout', function () {
         Auth::logout();
         request()->session()->invalidate();

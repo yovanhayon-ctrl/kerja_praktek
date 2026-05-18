@@ -163,8 +163,8 @@
         <div class="sidebar-label mt-2">Settings</div>
 
         {{-- PERBAIKAN: Menggunakan admin.manajemen.index sesuai web.php --}}
-        <a href="{{ route('admin.manajemen.index') }}"
-           class="sidebar-link {{ request()->routeIs('admin.manajemen.*') ? 'active' : '' }}">
+        <a href="{{ route('admin.manajemen_admin.index') }}"
+           class="sidebar-link {{ request()->routeIs('admin.manajemen_admin.*') ? 'active' : '' }}">
             <i class="bi bi-people"></i> Manajemen Admin
         </a>
 
@@ -207,9 +207,9 @@
                     style="font-size:0.55rem;">{{ $pendingCount }}</span>
                 @endif
             </a>
-            <button class="topbar-icon">
-                <i class="bi bi-gear"></i>
-            </button>
+            <a href="{{ route('admin.manajemen_admin.index') }}" class="topbar-icon text-decoration-none">
+                <i class="bi bi-person"></i>
+            </a>
             <div class="admin-avatar">{{ substr(Auth::user()->name ?? 'A', 0, 1) }}</div>
         </div>
     </div>
