@@ -12,7 +12,7 @@ class CheckoutController extends Controller
     {
         $request->validate([
             'nama'    => 'required',
-            'no_meja' => 'required|numeric',
+            'no_meja' => 'required|integer|min:1|max:30',
             'items'   => 'required',
             'total'   => 'required|numeric',
         ]);

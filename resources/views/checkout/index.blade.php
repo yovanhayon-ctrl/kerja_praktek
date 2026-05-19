@@ -49,14 +49,17 @@
                         <span class="input-group-text bg-white">
                             <i class="bi bi-table text-danger"></i>
                         </span>
+                        {{-- ← UBAH: Ditambahkan max="30" --}}
                         <input type="number"
                                id="inputMeja"
                                class="form-control"
                                placeholder="Contoh: 5"
                                min="1"
+                               max="30" 
                                required>
                     </div>
-                    <div class="form-text">Lihat nomor meja yang tertera di meja kamu.</div>
+                    <div class="form-text text-danger" id="mejaError" style="display: none;">Maksimal nomor meja adalah 30!</div>
+                    <div class="form-text">Lihat nomor meja yang tertera di meja kamu. Maksimal meja 30.</div>
                 </div>
 
                 {{-- Catatan Tambahan --}}
@@ -188,7 +191,6 @@
                     <input type="hidden" name="total"   id="hiddenTotal">
                     <input type="hidden" name="metode_pembayaran" value="cash">
 
-                    {{-- ← UBAH: pakai onclick untuk kosongkan cart dulu --}}
                     <button type="button" class="btn btn-danger btn-sm px-4" onclick="submitPesanan()">
                         <i class="bi bi-check-lg"></i> Ya, Pesan Sekarang!
                     </button>
@@ -243,20 +245,28 @@
     // Tombol Konfirmasi & Pesan
     document.getElementById('btnPesan').addEventListener('click', function () {
         const nama = document.getElementById('inputNama').value.trim();
-        const meja = document.getElementById('inputMeja').value.trim();
+        const mejaInput = document.getElementById('inputMeja');
+        const meja = parseInt(mejaInput.value.trim(), 10);
         const cart = getCart();
 
-        // Validasi
+        // Validasi Nama
         if (!nama) {
             document.getElementById('inputNama').focus();
             document.getElementById('inputNama').classList.add('is-invalid');
             return;
         }
-        if (!meja) {
-            document.getElementById('inputMeja').focus();
-            document.getElementById('inputMeja').classList.add('is-invalid');
+        
+        // ← UBAH: Validasi nomor meja jika kosong, kurang dari 1, atau lebih dari 30
+        if (isNaN(meja) || meja < 1 || meja > 30) {
+            mejaInput.focus();
+            mejaInput.classList.add('is-invalid');
+            document.getElementById('mejaError').style.display = 'block';
             return;
+        } else {
+            mejaInput.classList.remove('is-invalid');
+            document.getElementById('mejaError').style.display = 'none';
         }
+
         if (cart.length === 0) {
             alert('Keranjang kosong!');
             return;
@@ -282,7 +292,6 @@
         new bootstrap.Modal(document.getElementById('modalKonfirmasi')).show();
     });
 
-    // ← TAMBAHAN: kosongkan cart lalu submit form
     function submitPesanan() {
         localStorage.removeItem('cart');
         const badge = document.getElementById('cart-badge');
@@ -294,8 +303,15 @@
     document.getElementById('inputNama').addEventListener('input', function () {
         this.classList.remove('is-invalid');
     });
+    
+    // ← UBAH: Real-time validation saat mengetik nomor meja
     document.getElementById('inputMeja').addEventListener('input', function () {
+        const nilai = parseInt(this.value, 10);
+        if (nilai > 30) {
+            this.value = 30; // Otomatis mengunci angka ke 30 jika memaksa mengetik lebih
+        }
         this.classList.remove('is-invalid');
+        document.getElementById('mejaError').style.display = 'none';
     });
 
     renderRingkasan();
