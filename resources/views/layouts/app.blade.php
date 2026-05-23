@@ -66,23 +66,36 @@
 
             {{-- MENU --}}
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center gap-1">
+                <div class="navbar-nav ms-auto align-items-center gap-1">
+
+                    {{-- Beranda --}}
                     <li class="nav-item">
                         <a class="nav-link nav-link-hover px-3 py-2" style="color: #000;" href="{{ url('/') }}">
                             <i class="bi bi-house-door me-1"></i> Beranda
                         </a>
                     </li>
+
+                    {{-- Menu --}}
                     <li class="nav-item">
                         <a class="nav-link nav-link-hover px-3 py-2" style="color: #000;" href="{{ url('/menu') }}">
                             <i class="bi bi-grid me-1"></i> Menu
                         </a>
                     </li>
+
+                    {{-- Reservasi --}}
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-hover px-3 py-2" style="color: #000;" href="{{ route('reservasi.index') }}">
+                            <i class="bi bi-calendar-check me-1"></i> Reservasi
+                        </a>
+                    </li>
+
+                    {{-- Tentang Kami --}}
                     <li class="nav-item">
                         <a class="nav-link nav-link-hover px-3 py-2" style="color: #000;" href="{{ url('/tentang') }}">
                             <i class="bi bi-info-circle me-1"></i> Tentang
                         </a>
                     </li>
-
+                    
                     {{-- Divider --}}
                     <li class="nav-item mx-1">
                         <span style="border-left: 1px solid rgba(0,0,0,0.2); height: 24px; display: inline-block;"></span>
@@ -108,7 +121,7 @@
                             <i class="bi bi-clock-history me-1"></i> Riwayat
                         </a>
                     </li>
-                </ul>
+                </div>
             </div>
         </div>
     </nav>
@@ -123,7 +136,7 @@
         <div class="container">
             <div class="row gy-3">
                 <div class="col-md-4">
-                    <h5 class="fw-bold"><i class="bi bi-shop"></i> RestoKu</h5>
+                    <h5 class="fw-bold"><i class="bi bi-shop"></i> RM Saung Tiga</h5>
                     <p class="text-secondary small">Menyajikan cita rasa terbaik dengan bahan-bahan segar pilihan setiap harinya.</p>
                 </div>
                 <div class="col-md-4">
@@ -132,19 +145,20 @@
                         <li><a href="{{ url('/') }}" class="text-secondary text-decoration-none">Beranda</a></li>
                         <li><a href="{{ url('/menu') }}" class="text-secondary text-decoration-none">Menu</a></li>
                         <li><a href="{{ url('/tentang') }}" class="text-secondary text-decoration-none">Tentang Kami</a></li>
+                        <li><a href="{{ route('reservasi.index') }}" class="text-secondary text-decoration-none">Reservasi Meja</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
                     <h6 class="fw-semibold">Kontak</h6>
                     <ul class="list-unstyled small text-secondary">
-                        <li><i class="bi bi-geo-alt"></i> Jl. Contoh No. 123, Kota</li>
+                        <li><i class="bi bi-geo-alt"></i> JL.Pemuda No.2 RT.02/RW.06, Sawangan, Kota Depok, Jawa Barat 16511</li>
                         <li><i class="bi bi-clock"></i> 08.00 – 22.00 WIB</li>
-                        <li><i class="bi bi-telephone"></i> 0812-3456-7890</li>
+                        <li><i class="bi bi-telephone"></i> 081770003330</li>
                     </ul>
                 </div>
             </div>
             <hr class="border-secondary">
-            <p class="text-center text-secondary small mb-0">&copy; {{ date('Y') }} RestoKu. All rights reserved.</p>
+            <p class="text-center text-secondary small mb-0">&copy; {{ date('Y') }} RM Saung Tiga. All rights reserved.</p>
         </div>
     </footer>
 

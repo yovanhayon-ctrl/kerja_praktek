@@ -1,5 +1,7 @@
 @extends('admin.layouts.admin')
 
+@section('title', 'Admin Create Menu')
+
 @section('content')
 <div class="container-fluid py-4">
     <div class="row justify-content-center">

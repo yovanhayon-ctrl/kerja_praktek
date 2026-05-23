@@ -1,5 +1,7 @@
 @extends('admin.layouts.admin')
 
+@section('title', 'Admin Detail Pesanan')
+
 @section('content')
 <div class="container-fluid py-4">
     <div class="d-flex align-items-center gap-3 mb-4">

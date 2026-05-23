@@ -1,5 +1,7 @@
 @extends('admin.layouts.admin')
 
+@section('title', 'Admin Menu')
+
 @section('content')
 <div class="container-fluid py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">

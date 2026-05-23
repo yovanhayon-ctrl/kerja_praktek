@@ -1,4 +1,6 @@
-@extends('admin.layouts.admin') {{-- Pastikan nama layout ini sesuai dengan pembungkus admin Anda --}}
+@extends('admin.layouts.admin') 
+
+@section('title', 'Admin Statistik')
 
 @section('content')
 <div class="container-fluid py-4">

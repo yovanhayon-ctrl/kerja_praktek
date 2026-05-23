@@ -9,6 +9,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\PesanController; 
+use App\Http\Controllers\ReservasiController; 
 
 // Admin Panel Controllers
 use App\Http\Controllers\Admin\DashboardController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\Admin\AdminMenuController;
 use App\Http\Controllers\Admin\AdminPesananController;
 use App\Http\Controllers\Admin\StatistikController;
 use App\Http\Controllers\Admin\ManajemenAdminController;
+use App\Http\Controllers\Admin\AdminReservasiController; 
 
 /*
 |-------------------------------------
@@ -39,6 +41,10 @@ Route::get('/riwayat', [RiwayatController::class, 'index'])->name('riwayat');
 // Halaman Tentang Kami & Kontak
 Route::get('/tentang', function () { return view('tentang.index'); })->name('tentang');
 Route::post('/kirim-pesan', [PesanController::class, 'store'])->name('pesan.store');
+
+// Fitur Reservasi Meja Pelanggan
+Route::get('/reservasi', [ReservasiController::class, 'index'])->name('reservasi.index');   // <-- JALUR MENAMPILKAN HALAMAN FORM
+Route::post('/reservasi', [ReservasiController::class, 'store'])->name('reservasi.store'); // <-- JALUR SUBMIT FORM KE DATABASE
 
 
 //         ===== AUTENTIKASI (LOGIN/LOGOUT) =====
@@ -64,6 +70,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/pesanan', [AdminPesananController::class, 'index'])->name('pesanan.index');
     Route::get('/pesanan/detail/{id}', [AdminPesananController::class, 'show'])->name('pesanan.show');
     Route::patch('/pesanan/{id}/status', [AdminPesananController::class, 'updateStatus'])->name('pesanan.updateStatus');
+    
+    // Manajemen Reservasi Meja & Booking (Baru)
+    Route::get('/reservasi', [AdminReservasiController::class, 'index'])->name('reservasi.index');                    // <-- 2. JALUR MENAMPILKAN DATA RESERVASI
+    Route::patch('/reservasi/{id}/status', [AdminReservasiController::class, 'updateStatus'])->name('reservasi.updateStatus'); // <-- 3. LOGIKA UPDATE STATUS JADI DISETUJUI/SELESAI/BATAL
     
     // Manajemen Hubungi Kami / Pesan Masuk (Mail)
     Route::get('/pesan-masuk', [PesanController::class, 'index'])->name('pesan.index');

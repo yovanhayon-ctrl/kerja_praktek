@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Admin') - RestoKu</title>
+    <title>@yield('title', 'Admin')</title>
 
     {{-- Bootstrap CSS --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -112,10 +112,11 @@
 </head>
 <body>
 
-{{-- Menghitung Pesanan Pending & Pesan yang Belum Dibaca --}}
+{{-- Menghitung Pesanan Pending, Pesan yang Belum Dibaca, & Reservasi Pending --}}
 @php 
     $pendingCount = \App\Models\Pesanan::where('status', 'PENDING')->count(); 
     $unreadMessages = \App\Models\Pesan::where('status', 'BELUM_DIBACA')->count();
+    $pendingReservasi = \App\Models\Reservasi::where('status', 'PENDING')->count(); // Hitung reservasi baru
 @endphp
 
 {{-- SIDEBAR --}}
@@ -152,6 +153,17 @@
             @if($pendingCount > 0)
             <span class="ms-auto badge rounded-pill" style="background:#4ade80; color:#fff; font-size:0.65rem;">
                 {{ $pendingCount }}
+            </span>
+            @endif
+        </a>
+
+        {{-- LINK MENU DATA RESERVASI MEJA BARU --}}
+        <a href="{{ route('admin.reservasi.index') }}"
+           class="sidebar-link {{ request()->routeIs('admin.reservasi.*') ? 'active' : '' }}">
+            <i class="bi bi-calendar-event"></i> Data Reservasi
+            @if($pendingReservasi > 0)
+            <span class="ms-auto badge rounded-pill bg-warning text-dark" style="font-size:0.65rem; font-weight:600;">
+                {{ $pendingReservasi }}
             </span>
             @endif
         </a>
@@ -225,6 +237,7 @@
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                     style="font-size:0.55rem;">{{ $unreadMessages }}</span>
                 @endif
+            </a>
             
             {{-- Shortcut ikon orang langsung ke Manajemen Akun Admin --}}
             <a href="{{ route('admin.manajemen_admin.index') }}" class="topbar-icon text-decoration-none">
