@@ -13,6 +13,12 @@ class ReservasiController extends Controller
         // Default mengambil tanggal hari ini menggunakan timezone Asia/Jakarta yang sudah kita perbaiki kemarin
         $tanggalDipilih = $request->get('tanggal', Carbon::today()->toDateString());
 
+        // AMANKAN KETIKAN USER PASCA-RELOAD TANGGAL
+        // Jika ada input nama atau whatsapp yang dikirim lewat URL saat ganti tanggal, amankan ke flash session
+        if ($request->has('nama_lengkap') || $request->has('whatsapp')) {
+            session()->flashInput($request->all());
+        }
+
         // Mengambil daftar nomor meja yang statusnya masih aktif (belum selesai/batal) di tanggal tersebut
         // Menggunakan block try-catch agar jika tabel database belum di-migrate, aplikasi tidak langsung crash
         try {

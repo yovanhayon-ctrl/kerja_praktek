@@ -169,7 +169,7 @@
                     </li>
 
                     {{-- 7. Tombol Riwayat --}}
-                    <li class="nav-item mt-2 mt-lg-0 w-100 w-lg-auto d-flex align-items-center">
+                    {{-- <li class="nav-item mt-2 mt-lg-0 w-100 w-lg-auto d-flex align-items-center">
                         <a class="btn btn-sm ms-lg-1 fw-semibold d-inline-flex align-items-center justify-content-center gap-1"
                            href="{{ url('/riwayat') }}"
                            style="background-color: rgba(0,0,0,0.06); color: #000; border: 1.5px solid rgba(0,0,0,0.15); border-radius: 20px; padding: 6px 16px; transition: all 0.2s; height: fit-content;"
@@ -178,8 +178,17 @@
                             <i class="bi bi-clock-history"></i>
                             <span>Riwayat</span>
                         </a>
+                    </li> --}}
+                    <li class="nav-item mt-2 mt-lg-0 w-100 {{-- Mengizinkan lebar penuh di mobile --}} w-lg-auto d-flex align-items-center">
+                        <a class="btn btn-sm w-100 {{-- Menambahkan w-100 agar memanjang penuh di layout collapse --}} ms-lg-1 fw-semibold d-inline-flex align-items-center justify-content-center gap-1"
+                        href="{{ url('/riwayat') }}"
+                        style="background-color: rgba(0,0,0,0.06); color: #000; border: 1.5px solid rgba(0,0,0,0.15); border-radius: 20px; padding: 10px 16px; {{-- Padding vertikal ditambah sedikit agar seimbang dengan nav-link --}} transition: all 0.2s; height: fit-content;"
+                        onmouseover="this.style.backgroundColor='rgba(0,0,0,0.12)'"
+                        onmouseout="this.style.backgroundColor='rgba(0,0,0,0.06)'">
+                            <i class="bi bi-clock-history"></i>
+                            <span>Riwayat</span>
+                        </a>
                     </li>
-
                 </div>
             </div>
 

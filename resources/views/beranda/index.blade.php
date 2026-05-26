@@ -89,19 +89,19 @@
 {{-- ============================= --}}
 <section class="py-5 fade-up" id="menu-populer">
     <div class="container">
+        
+        {{-- BAGIAN HEADLINE & TOMBOL --}}
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h2 class="fw-bold mb-1">Menu Populer</h2>
-                <p class="text-muted mb-0">Pilihan terfavorit pelanggan kami</p>
+            <div style="max-width: 65%;">
+                <h2 class="fw-bold mb-1" style="font-size: calc(1.2rem + 0.6vw);">Menu Populer</h2>
+                <p class="text-muted mb-0 small text-truncate">Pilihan terfavorit pelanggan</p>
             </div>
-            <a href="{{ url('/menu') }}" class="btn btn-sm fw-semibold px-3"
-               style="border: 1.5px solid #198754; color: #0d3d1f; border-radius: 20px; transition: all 0.2s;"
-               onmouseover="this.style.backgroundColor='#198754'; this.style.color='#fff';"
-               onmouseout="this.style.backgroundColor='transparent'; this.style.color='#0d3d1f';">
-                Lihat Semua <i class="bi bi-arrow-right"></i>
+            <a href="{{ url('/menu') }}" class="btn btn-outline-success fw-semibold btn-sm text-nowrap rounded-pill btn-lihat-semua px-3 py-1_5" style="font-size: 0.85rem;">
+                Lihat Semua <i class="bi bi-arrow-right ms-1"></i>
             </a>
         </div>
 
+        {{-- GRID KARTU MENU (LOGIKA TETAP SAMA KAK) --}}
         <div class="row g-4">
             @forelse($menuPopuler ?? [] as $menu)
             <div class="col-6 col-md-4 col-lg-3">
@@ -174,6 +174,7 @@
             @endforeach
             @endforelse
         </div>
+
     </div>
 </section>
 
@@ -225,12 +226,10 @@
                     <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color:#198754;"></i> Suasana nyaman dan bersih</li>
                     <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color:#198754;"></i> Pelayanan ramah dan cepat</li>
                 </ul>
-                <a href="{{ url('/tentang') }}"
-                   class="btn px-4 fw-semibold"
-                   style="border: 2px solid #198754; color: #0d3d1f; border-radius: 10px; transition: all 0.2s;"
-                   onmouseover="this.style.backgroundColor='#198754'; this.style.color='#fff';"
-                   onmouseout="this.style.backgroundColor='transparent'; this.style.color='#0d3d1f';">
-                    Selengkapnya <i class="bi bi-arrow-right"></i>
+                
+                {{-- TOMBOL SELENGKAPNYA YANG SUDAH DISERASIKAN --}}
+                <a href="{{ url('/tentang') }}" class="btn btn-outline-success fw-semibold px-4 py-2 rounded-pill btn-selengkapnya">
+                    Selengkapnya <i class="bi bi-arrow-right ms-1"></i>
                 </a>
             </div>
 
@@ -246,7 +245,7 @@
                     @endphp
                     @foreach($stats as $s)
                     <div class="col-6">
-                        <div class="card border-0 shadow-sm text-center p-4 h-100 stats-card">
+                        <div class="card border-0 shadow-sm text-center p-4 h-100 stats-card" style="border-radius: 16px;">
                             <i class="bi {{ $s['icon'] }} fs-2 mb-2" style="color: {{ $s['color'] }};"></i>
                             <h3 class="fw-bold mb-0">{{ $s['angka'] }}</h3>
                             <small class="text-muted">{{ $s['label'] }}</small>
@@ -339,6 +338,31 @@
         background-color: #155a3a !important;
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(25, 135, 84, 0.4);
+    }
+
+    /* Lihat Semua Button Custom Hover */
+    .btn-lihat-semua {
+        border-color: #198754 !important;
+        color: #0d3d1f !important;
+        transition: all 0.3s ease;
+    }
+    .btn-lihat-semua:hover {
+        background-color: #198754 !important;
+        color: #fff !important;
+        transform: translateX(3px);
+    }
+
+    /* Selengkapnya Button Custom Hover */
+    .btn-selengkapnya {
+        border-color: #198754 !important;
+        color: #0d3d1f !important;
+        transition: all 0.3s ease;
+    }
+    .btn-selengkapnya:hover {
+        background-color: #198754 !important;
+        color: #fff !important;
+        transform: translateY(-2px); /* Memberikan efek sedikit mengangkat ke atas saat di-hover */
+        box-shadow: 0 4px 12px rgba(25, 135, 84, 0.2);
     }
 
     /* Stats Card */

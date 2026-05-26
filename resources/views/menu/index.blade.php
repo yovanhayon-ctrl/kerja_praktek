@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Menu - RestoKu')
+@section('title', 'Menu - RM Saung Tiga')
 
 @section('content')
 <div class="container py-5">
@@ -32,29 +32,37 @@
             </form>
         </div>
 
-        {{-- Filter Kategori --}}
+        {{-- Filter Kategori (Terbagi Rata/Space Evenly di Mobile, Rapi di Laptop) --}}
         <div class="col-md-6">
-            <div class="d-flex gap-2 flex-wrap">
-                <a href="{{ url('/menu') }}?search={{ request('search') }}"
-                   class="btn btn-sm filter-btn {{ !request('kategori') ? 'btn-success active' : 'btn-outline-success' }}"
-                   style="border-radius:20px;">
-                    Semua
-                </a>
-                <a href="{{ url('/menu') }}?kategori=Makanan&search={{ request('search') }}"
-                   class="btn btn-sm filter-btn {{ request('kategori') == 'Makanan' ? 'btn-success active' : 'btn-outline-success' }}"
-                   style="border-radius:20px;">
-                    Makanan
-                </a>
-                <a href="{{ url('/menu') }}?kategori=Minuman&search={{ request('search') }}"
-                   class="btn btn-sm filter-btn {{ request('kategori') == 'Minuman' ? 'btn-success active' : 'btn-outline-success' }}"
-                   style="border-radius:20px;">
-                    Minuman
-                </a>
-                <a href="{{ url('/menu') }}?kategori=Paket&search={{ request('search') }}"
-                   class="btn btn-sm filter-btn {{ request('kategori') == 'Paket' ? 'btn-success active' : 'btn-outline-success' }}"
-                   style="border-radius:20px;">
-                    Paket
-                </a>
+            <div class="row g-2 row-cols-4 w-100 m-0 p-0 filter-container">
+                <div class="col p-0 px-1">
+                    <a href="{{ url('/menu') }}?search={{ request('search') }}"
+                       class="btn btn-sm filter-btn w-100 text-center text-nowrap {{ !request('kategori') ? 'btn-success active' : 'btn-outline-success' }}"
+                       style="border-radius:20px; font-size: 0.85rem; padding: 6px 0;">
+                        Semua
+                    </a>
+                </div>
+                <div class="col p-0 px-1">
+                    <a href="{{ url('/menu') }}?kategori=Makanan&search={{ request('search') }}"
+                       class="btn btn-sm filter-btn w-100 text-center text-nowrap {{ request('kategori') == 'Makanan' ? 'btn-success active' : 'btn-outline-success' }}"
+                       style="border-radius:20px; font-size: 0.85rem; padding: 6px 0;">
+                        Makanan
+                    </a>
+                </div>
+                <div class="col p-0 px-1">
+                    <a href="{{ url('/menu') }}?kategori=Minuman&search={{ request('search') }}"
+                       class="btn btn-sm filter-btn w-100 text-center text-nowrap {{ request('kategori') == 'Minuman' ? 'btn-success active' : 'btn-outline-success' }}"
+                       style="border-radius:20px; font-size: 0.85rem; padding: 6px 0;">
+                        Minuman
+                    </a>
+                </div>
+                <div class="col p-0 px-1">
+                    <a href="{{ url('/menu') }}?kategori=Paket&search={{ request('search') }}"
+                       class="btn btn-sm filter-btn w-100 text-center text-nowrap {{ request('kategori') == 'Paket' ? 'btn-success active' : 'btn-outline-success' }}"
+                       style="border-radius:20px; font-size: 0.85rem; padding: 6px 0;">
+                        Paket
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -85,47 +93,48 @@
             <div class="card h-100 border-0 shadow-sm menu-card">
 
                 {{-- Gambar --}}
-                <div class="position-relative">
+                <div class="position-relative overflow-hidden" style="border-radius: 16px 16px 0 0;">
                     @if($menu->gambar)
                         <img src="{{ asset('storage/' . $menu->gambar) }}"
-                             class="card-img-top"
+                             class="card-img-top menu-card-img"
                              alt="{{ $menu->nama_menu }}"
-                             style="height:180px; object-fit:cover;">
+                             style="height: 180px; object-fit: cover;">
                     @else
                         <div class="bg-secondary bg-opacity-25 d-flex align-items-center justify-content-center"
-                             style="height:180px; border-radius: 0.375rem 0.375rem 0 0;">
+                             style="height:180px;">
                             <i class="bi bi-image text-secondary fs-1"></i>
                         </div>
                     @endif
 
                     {{-- Badge Kategori --}}
-                    <span class="position-absolute top-0 end-0 m-2 badge
-                        {{ $menu->kategori == 'Makanan' ? 'bg-danger' : 'bg-info' }}">
-                        {{ $menu->kategori }}
+                    <span class="position-absolute top-0 start-0 m-2 badge"
+                          style="background-color: #eb1414; color: #fff; border-radius: 10px;">
+                        <i class="bi bi-fire"></i> {{ $menu->kategori }}
                     </span>
                 </div>
 
-                {{-- Body --}}
+                {{-- Body Card --}}
                 <div class="card-body d-flex flex-column">
-                    <h6 class="card-title fw-bold mb-1">{{ $menu->nama_menu }}</h6>
-                    <p class="text-muted small mb-2" style="min-height:36px;">
-                        {{ Str::limit($menu->deskripsi, 50, '...') }}
-                    </p>
-                    <p class="text-dark fw-bold mb-3 mt-auto">
+                    <h6 class="card-title fw-bold mb-1 text-truncate">{{ $menu->nama_menu }}</h6>
+                    <p class="text-muted small mb-2">{{ $menu->kategori }}</p>
+                    
+                    <p class="fw-bold mt-auto mb-3" style="color: #000000; font-size: 1rem;">
                         Rp {{ number_format($menu->harga, 0, ',', '.') }}
                     </p>
 
-                    {{-- Tombol --}}
+                    {{-- Tombol Aksi --}}
                     <div class="d-flex gap-2">
                         <a href="{{ url('/menu/' . $menu->id) }}"
-                           class="btn btn-outline-secondary btn-sm flex-fill">
+                           class="btn btn-outline-secondary btn-sm flex-fill d-flex align-items-center justify-content-center gap-1"
+                           style="border-radius: 8px; height: 38px;">
                             <i class="bi bi-eye"></i> Detail
                         </a>
-                        <button class="btn btn-success btn-sm flex-fill btn-tambah-cart"
+                        <button class="btn btn-sm flex-fill btn-tambah-cart fw-semibold d-flex align-items-center justify-content-center gap-1 text-nowrap"
+                                style="background-color: #198754; color: #fff; border-radius: 8px; border: none; height: 38px; transition: background-color 0.2s ease;"
                                 data-id="{{ $menu->id }}"
                                 data-nama="{{ $menu->nama_menu }}"
                                 data-harga="{{ $menu->harga }}">
-                            <i class="bi bi-cart-plus"></i> Pesan
+                            <i class="bi bi-cart-plus"></i> <span>Pesan</span>
                         </button>
                     </div>
                 </div>
@@ -145,7 +154,6 @@
     {{-- PAGINATION --}}
     @if($menus->hasPages())
     <div class="d-flex justify-content-center mt-5">
-        {{-- Pertahankan parameter search & kategori saat pindah halaman --}}
         {{ $menus->appends(request()->query())->links('pagination::bootstrap-5') }}
     </div>
     @endif
@@ -155,13 +163,32 @@
 
 @push('styles')
 <style>
-    .menu-card { transition: transform 0.2s, box-shadow 0.2s; }
+    .menu-card { transition: transform 0.2s, box-shadow 0.2s; border-radius: 16px; }
     .menu-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.12) !important; }
 
-    /* Styling pagination aktif */
-    .pagination .page-item.active .page-link { background-color: #dc3545; border-color: #dc3545; }
-    .pagination .page-link { color: #dc3545; }
-    .pagination .page-link:hover { color: #fff; background-color: #dc3545; border-color: #dc3545; }
+    /* Hover Tombol Pesan: Hanya ganti warna background, tanpa animasi gerak/shadow keluar */
+    .btn-tambah-cart:hover {
+        background-color: #13633d !important;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Styling pagination aktif agar serasi dengan nuansa hijau Saung Tiga */
+    .pagination .page-item.active .page-link { background-color: #198754; border-color: #198754; color: #fff; }
+    .pagination .page-link { color: #198754; }
+    .pagination .page-link:hover { color: #fff; background-color: #198754; border-color: #198754; }
+    
+    /* Warna aktif pada filter tombol kategori */
+    .filter-btn.btn-success { background-color: #198754; border-color: #198754; }
+    .filter-btn.btn-outline-success { color: #198754; border-color: #198754; background-color: transparent; }
+    .filter-btn.btn-outline-success:hover { background-color: #198754; color: #fff; }
+
+    /* Membatasi lebar maksimum baris tombol di desktop agar tidak terlalu molor panjang */
+    @media (min-width: 768px) {
+        .filter-container {
+            max-width: 440px;
+        }
+    }
 </style>
 @endpush
 
@@ -173,7 +200,7 @@
         clearTimeout(searchTimer);
         searchTimer = setTimeout(() => {
             document.getElementById('formSearch').submit();
-        }, 500); // submit otomatis setelah berhenti mengetik 0.5 detik
+        }, 500);
     });
 
     // ── TAMBAH KE CART ──
@@ -195,19 +222,25 @@
             localStorage.setItem('cart', JSON.stringify(cart));
             updateCartBadge();
 
-            // Notifikasi
+            // Notifikasi atas
             document.getElementById('alertMsg').textContent = nama + ' berhasil ditambahkan ke cart!';
             const alertEl = document.getElementById('alertCart');
             alertEl.classList.remove('d-none');
             setTimeout(() => alertEl.classList.add('d-none'), 3000);
 
-            // Feedback tombol
-            this.innerHTML = '<i class="bi bi-check-lg"></i> Ditambahkan';
-            this.classList.replace('btn-danger', 'btn-success');
+            // Perubahan State Tombol: Dikunci murni hanya ganti teks & warna tanpa efek gerak layout
+            const textEl = this.querySelector('span');
+            const iconEl = this.querySelector('i');
+            
+            this.style.backgroundColor = '#13633d'; // warna hover/aktif sukses
+            iconEl.className = 'bi bi-check-lg';
+            textEl.textContent = 'Sukses';
+            
             setTimeout(() => {
-                this.innerHTML = '<i class="bi bi-cart-plus"></i> Pesan';
-                this.classList.replace('btn-success', 'btn-danger');
-            }, 1500);
+                iconEl.className = 'bi bi-cart-plus';
+                textEl.textContent = 'Pesan';
+                this.style.backgroundColor = '#198754'; // kembalikan ke warna asli awal
+            }, 1200);
         });
     });
 
