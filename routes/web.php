@@ -43,8 +43,13 @@ Route::get('/tentang', function () { return view('tentang.index'); })->name('ten
 Route::post('/kirim-pesan', [PesanController::class, 'store'])->name('pesan.store');
 
 // Fitur Reservasi Meja Pelanggan
-Route::get('/reservasi', [ReservasiController::class, 'index'])->name('reservasi.index');   // <-- JALUR MENAMPILKAN HALAMAN FORM
-Route::post('/reservasi', [ReservasiController::class, 'store'])->name('reservasi.store'); // <-- JALUR SUBMIT FORM KE DATABASE
+Route::get('/reservasi', [ReservasiController::class, 'index'])->name('reservasi.index');     // Halaman form booking
+Route::post('/reservasi', [ReservasiController::class, 'store'])->name('reservasi.store');   // Submit form ke database
+Route::get('/reservasi/cek-status', [ReservasiController::class, 'cekStatusIntra'])->name('reservasi.cekStatus'); // Endpoint AJAX Cek Status Internal
+
+// Fitur Lama: Cek Status Reservasi Mandiri oleh Pelanggan (Halaman Terpisah)
+Route::get('/cek-reservasi', [ReservasiController::class, 'cekStatusForm'])->name('reservasi.cekForm');
+Route::post('/cek-reservasi', [ReservasiController::class, 'cekStatusProses'])->name('reservasi.cekProses');
 
 
 //         ===== AUTENTIKASI (LOGIN/LOGOUT) =====
@@ -71,9 +76,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/pesanan/detail/{id}', [AdminPesananController::class, 'show'])->name('pesanan.show');
     Route::patch('/pesanan/{id}/status', [AdminPesananController::class, 'updateStatus'])->name('pesanan.updateStatus');
     
-    // Manajemen Reservasi Meja & Booking (Baru)
-    Route::get('/reservasi', [AdminReservasiController::class, 'index'])->name('reservasi.index');                    // <-- 2. JALUR MENAMPILKAN DATA RESERVASI
-    Route::patch('/reservasi/{id}/status', [AdminReservasiController::class, 'updateStatus'])->name('reservasi.updateStatus'); // <-- 3. LOGIKA UPDATE STATUS JADI DISETUJUI/SELESAI/BATAL
+    // Manajemen Reservasi Meja & Booking
+    Route::get('/reservasi', [AdminReservasiController::class, 'index'])->name('reservasi.index');                    // Menampilkan data reservasi berkumpul
+    Route::patch('/reservasi/{id}/status', [AdminReservasiController::class, 'updateStatus'])->name('reservasi.updateStatus'); // Logika update status serentak
     
     // Manajemen Hubungi Kami / Pesan Masuk (Mail)
     Route::get('/pesan-masuk', [PesanController::class, 'index'])->name('pesan.index');

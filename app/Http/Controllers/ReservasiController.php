@@ -3,37 +3,44 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Reservasi; // Pastikan kamu sudah membuat model/migration untuk tabel reservasis
+use App\Models\Reservasi;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class ReservasiController extends Controller
 {
+    /**
+     * Menampilkan Form Reservasi untuk Pelanggan (Terintegrasi Pengecekan Meja)
+     */
     public function index(Request $request)
     {
-        // Default mengambil tanggal hari ini menggunakan timezone Asia/Jakarta yang sudah kita perbaiki kemarin
+        // 1. Ambil tanggal yang dipilih dari URL (?tanggal=...), jika tidak ada default ke hari ini
         $tanggalDipilih = $request->get('tanggal', Carbon::today()->toDateString());
 
-        // AMANKAN KETIKAN USER PASCA-RELOAD TANGGAL
-        // Jika ada input nama atau whatsapp yang dikirim lewat URL saat ganti tanggal, amankan ke flash session
+        // 2. Trik mengamankan ketikan nama & wa saat halaman reload pas ganti tanggal
         if ($request->has('nama_lengkap') || $request->has('whatsapp')) {
             session()->flashInput($request->all());
         }
 
-        // Mengambil daftar nomor meja yang statusnya masih aktif (belum selesai/batal) di tanggal tersebut
-        // Menggunakan block try-catch agar jika tabel database belum di-migrate, aplikasi tidak langsung crash
+        // 3. Ambil daftar nomor meja yang sudah dibooking pada tanggal tersebut
+        // KUNCI UTAMA: Hanya kunci meja yang berstatus PENDING dan DISETUJUI.
+        // Status 'SELESAI' dan 'CANCELLED' dilepas agar meja otomatis kembali READY (Hijau).
         try {
             $mejaTerboking = Reservasi::whereDate('waktu_reservasi', $tanggalDipilih)
-                ->whereIn('status', ['PENDING', 'DISETUJUI'])
+                ->whereIn('status', ['PENDING', 'DISETUJUI']) 
                 ->pluck('nomor_meja')
                 ->toArray();
         } catch (\Exception $e) {
             $mejaTerboking = [];
         }
 
-        // Mengarah ke folder resources/views/reservasi/index.blade.php yang sudah kamu buat
-        return view('reservasi.index', compact('mejaTerboking', 'tanggalDipilih'));
+        // 4. Kirim semua variabel yang dibutuhkan oleh blade reservasi/index.blade.php
+        return view('reservasi.index', compact('tanggalDipilih', 'mejaTerboking')); 
     }
 
+    /**
+     * Menyimpan Data Reservasi Baru ke Database (Mendukung Multi-Meja)
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -41,32 +48,118 @@ class ReservasiController extends Controller
             'whatsapp'     => 'required|numeric',
             'tanggal'      => 'required|date|after_or_equal:today',
             'jam'          => 'required',
-            'nomor_meja'   => 'required|integer|between:1,30',
+            'nomor_meja'   => 'required|array', 
+            'nomor_meja.*' => 'integer|between:1,30',
             'catatan'      => 'nullable|string',
         ]);
 
         $waktuReservasi = Carbon::parse($request->tanggal . ' ' . $request->jam);
 
-        // Validasi double-booking untuk keamanan data di tingkat database
-        $cekDoubleBooking = Reservasi::whereDate('waktu_reservasi', $request->tanggal)
-            ->where('nomor_meja', $request->nomor_meja)
-            ->whereIn('status', ['PENDING', 'DISETUJUI'])
-            ->exists();
+        // Validasi double-booking secara looping: Hanya bentrok jika statusnya PENDING atau DISETUJUI
+        foreach ($request->nomor_meja as $noMeja) {
+            $cekDoubleBooking = Reservasi::whereDate('waktu_reservasi', $request->tanggal)
+                ->where('nomor_meja', $noMeja)
+                ->whereIn('status', ['PENDING', 'DISETUJUI'])
+                ->exists();
 
-        if ($cekDoubleBooking) {
-            return redirect()->back()->with('error', 'Maaf, meja ini baru saja di-booking oleh pelanggan lain pada tanggal tersebut. Silakan pilih meja atau tanggal lainnya.');
+            if ($cekDoubleBooking) {
+                return redirect()->back()->with('error', 'Maaf, Meja #' . $noMeja . ' baru saja dibooking pelanggan lain pada tanggal tersebut. Silakan pilih kombinasi meja lainnya.');
+            }
         }
 
-        // Proses simpan data reservasi baru
-        $reservasi = new Reservasi();
-        $reservasi->nama_lengkap = $request->nama_lengkap;
-        $reservasi->whatsapp = $request->whatsapp;
-        $reservasi->waktu_reservasi = $waktuReservasi;
-        $reservasi->nomor_meja = $request->nomor_meja;
-        $reservasi->catatan = $request->catatan;
-        $reservasi->status = 'PENDING'; 
-        $reservasi->save();
+        // Simpan satu baris baru di DB untuk setiap meja yang dipilih
+        foreach ($request->nomor_meja as $noMeja) {
+            $reservasi = new Reservasi();
+            $reservasi->nama_lengkap = $request->nama_lengkap;
+            $reservasi->whatsapp = $request->whatsapp;
+            $reservasi->waktu_reservasi = $waktuReservasi;
+            $reservasi->nomor_meja = $noMeja;
+            $reservasi->catatan = $request->catatan;
+            $reservasi->status = 'PENDING'; 
+            $reservasi->save();
+        }
 
-        return redirect()->back()->with('success', 'Reservasi meja berhasil dikirim! Silakan tunggu konfirmasi selanjutnya.');
+        return redirect()->back()->with('success', 'Reservasi untuk ' . count($request->nomor_meja) . ' meja berhasil dikirim! Silakan tunggu konfirmasi selanjutnya.');
+    }
+
+    /**
+     * Fitur Baru: Memproses Pencarian Status Menggunakan AJAX Langsung di Dalam Tab Halaman
+     */
+    public function cekStatusIntra(Request $request)
+    {
+        $whatsappInput = str_replace([' ', '-', '+'], '', $request->get('whatsapp'));
+
+        if (empty($whatsappInput)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Nomor WhatsApp tidak boleh kosong.'
+            ], 400);
+        }
+
+        $reservasi = Reservasi::select(
+                'nama_lengkap',
+                'waktu_reservasi',
+                'catatan',
+                'status',
+                DB::raw('GROUP_CONCAT(nomor_meja ORDER BY nomor_meja ASC) as kumpulan_meja')
+            )
+            ->where('whatsapp', 'LIKE', '%' . $whatsappInput . '%')
+            ->groupBy('nama_lengkap', 'waktu_reservasi', 'catatan', 'status')
+            ->orderBy('waktu_reservasi', 'desc')
+            ->get();
+
+        $dataFormatted = $reservasi->map(function ($item) {
+            $dt = Carbon::parse($item->waktu_reservasi);
+            return [
+                'nama_lengkap' => $item->nama_lengkap,
+                'tanggal' => $dt->translatedFormat('d M Y'),
+                'jam' => $dt->format('H:i') . ' WIB',
+                'nomor_meja' => $item->kumpulan_meja,
+                'catatan' => $item->catatan ?? '-',
+                'status' => strtoupper($item->status)
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'reservasi' => $dataFormatted
+        ]);
+    }
+
+    /**
+     * Menampilkan Halaman Form Cek Status Reservasi (Legacy Old Page)
+     */
+    public function cekStatusForm()
+    {
+        return view('reservasi.cek_status');
+    }
+
+    /**
+     * Memproses Pencarian Status Reservasi Berdasarkan Nomor WhatsApp (Legacy Old Page)
+     */
+    public function cekStatusProses(Request $request)
+    {
+        $request->validate([
+            'whatsapp' => 'required|string'
+        ], [
+            'whatsapp.required' => 'Nomor WhatsApp wajib diisi untuk melakukan pelacakan.'
+        ]);
+
+        $whatsappInput = str_replace([' ', '-', '+'], '', $request->whatsapp);
+
+        $hasil = Reservasi::select(
+                'nama_lengkap',
+                'waktu_reservasi',
+                'catatan',
+                'status',
+                DB::raw('GROUP_CONCAT(nomor_meja ORDER BY nomor_meja ASC) as kumpulan_meja'),
+                DB::raw('MAX(id) as id')
+            )
+            ->where('whatsapp', 'LIKE', '%' . $whatsappInput . '%')
+            ->groupBy('nama_lengkap', 'waktu_reservasi', 'catatan', 'status')
+            ->orderBy('waktu_reservasi', 'desc')
+            ->get();
+
+        return view('reservasi.cek_status', compact('hasil'))->with('input_wa', $request->whatsapp);
     }
 }

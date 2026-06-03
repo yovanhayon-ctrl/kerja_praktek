@@ -41,7 +41,11 @@
                                     <i class="bi bi-whatsapp me-1"></i>{{ $res->whatsapp }}
                                 </a>
                             </td>
-                            <td><span class="badge bg-outline-dark border text-dark py-1.5 px-3">Meja {{ $res->nomor_meja }}</span></td>
+                            <td>
+                                <span class="badge bg-outline-dark border text-dark py-1.5 px-3">
+                                    Meja {{ str_replace(',', ', ', $res->kumpulan_meja) }}
+                                </span>
+                            </td>
                             <td>
                                 <div class="fw-semibold text-dark">{{ \Carbon\Carbon::parse($res->waktu_reservasi)->format('H:i') }} WIB</div>
                                 <small class="text-muted">{{ \Carbon\Carbon::parse($res->waktu_reservasi)->format('d M Y') }}</small>
@@ -67,7 +71,7 @@
                                                 </div>
                                                 <div class="modal-body p-4">
                                                     <div class="mb-3 small text-muted">
-                                                        <i class="bi bi-person me-1"></i> <strong>{{ $res->nama_lengkap }}</strong> | Meja {{ $res->nomor_meja }}
+                                                        <i class="bi bi-person me-1"></i> <strong>{{ $res->nama_lengkap }}</strong> | Meja {{ str_replace(',', ', ', $res->kumpulan_meja) }}
                                                     </div>
                                                     <div class="p-3 bg-light rounded text-dark border-start border-success border-3" 
                                                          style="font-size: 0.95rem; white-space: pre-wrap; line-height: 1.6; text-align: left;">
@@ -115,13 +119,31 @@
                                                 <button type="submit" class="dropdown-item text-success"><i class="bi bi-calendar-check me-2"></i>Selesai / Meja Ready</button>
                                             </form>
                                         </li>
-                                        <li><hr class="dropdown-divider"></li>
                                         <li>
                                             <form action="{{ route('admin.reservasi.updateStatus', $res->id) }}" method="POST">
                                                 @csrf @method('PATCH')
                                                 <input type="hidden" name="status" value="DIBATALKAN">
                                                 <button type="submit" class="dropdown-item text-danger"><i class="bi bi-x-circle me-2"></i>Batalkan</button>
                                             </form>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        
+                                        <li>
+                                            @php
+                                                // Template pesan teks WhatsApp
+                                                $pesanWA = "Halo Kak " . $res->nama_lengkap . ",\n\n" .
+                                                           "Kami dari *RM Saung Tiga* ingin mengonfirmasi status booking tempat Anda:\n\n" .
+                                                           "• *Meja* : Meja " . str_replace(',', ', ', $res->kumpulan_meja) . "\n" .
+                                                           "• *Waktu* : " . \Carbon\Carbon::parse($res->waktu_reservasi)->format('d M Y (H:i)') . " WIB\n" .
+                                                           "• *Status* : *" . ($res->status == 'PENDING' ? 'MENUNGGU KONFIRMASI' : $res->status) . "*\n\n" .
+                                                           "Silakan datang sesuai jadwal atau Anda bisa mengecek status berkala langsung di website resmi kami.\n" .
+                                                           "Terima kasih Banyak, Kak!";
+                                                
+                                                $urlWA = "https://wa.me/" . preg_replace('/[^0-9]/', '', $res->whatsapp) . "?text=" . urlencode($pesanWA);
+                                            @endphp
+                                            <a href="{{ $urlWA }}" target="_blank" class="dropdown-item text-success fw-bold">
+                                                <i class="bi bi-send-check-fill me-2"></i>Kirim Notif WA
+                                            </a>
                                         </li>
                                     </ul>
                                 </div>
@@ -131,7 +153,7 @@
                         <tr>
                             <td colspan="7" class="text-center text-muted py-4">Belum ada data reservasi masuk.</td>
                         </tr>
-                        @endempty
+                        @endforelse
                     </tbody>
                 </table>
             </div>
