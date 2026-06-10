@@ -26,8 +26,10 @@
             gap: 0.5rem;
             
             /* Padding vertikal default untuk tampilan mobile menu */
-            padding-top: 10px !important;
-            padding-bottom: 10px !important;
+            padding-top: 12px !important;
+            padding-bottom: 12px !important;
+            padding-left: 8px !important;
+            padding-right: 8px !important;
         }
         
         /* Kustomisasi Khusus Tampilan Desktop (Monitor Besar) */
@@ -72,12 +74,12 @@
         /* Kustomisasi Khusus Tampilan Mobile & Tablet (Layar HP) */
         @media (max-width: 991.98px) {
             .navbar {
-                min-height: auto !important; /* Diubah dari 105px agar tinggi navbar mengikuti isi */
+                min-height: auto !important;
                 padding-top: 8px !important;
                 padding-bottom: 8px !important;
             }
             .responsive-logo {
-                height: 45px !important; /* Diubah dari 85px agar pas dan rapi di HP/Tablet */
+                height: 45px !important;
                 width: auto !important;
                 margin: 0 !important;
             }
@@ -86,6 +88,14 @@
                 margin-top: 10px;
                 border-top: 1px solid rgba(0,0,0,0.08);
                 padding-top: 10px;
+            }
+            /* Menambahkan border bawah tipis antar list menu mobile agar rapi */
+            .navbar-nav .nav-item {
+                border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            }
+            /* Menghilangkan border bawah pada item terakhir (Tombol Riwayat) */
+            .navbar-nav .nav-item:last-child {
+                border-bottom: none;
             }
         }
     </style>
@@ -107,48 +117,51 @@
             </a>
 
             {{-- ELEMEN SISI KANAN UNTUK MOBILE VIEW (< 992px) --}}
-            <div class="d-flex align-items-center gap-2 d-lg-none">
-                {{-- Keranjang duplikat khusus Mobile agar user HP tidak perlu membuka menu collapse --}}
-                <a class="nav-link position-relative px-3 py-2" href="{{ url('/cart') }}" style="color: #000;">
-                    <i class="bi bi-cart3 fs-5"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark"
-                          style="font-size: 0.65rem;"
-                          id="cart-badge-mobile">0</span>
-                </a>
-                {{-- Tombol Hamburger Mobile --}}
-                <button class="navbar-toggler border-0 shadow-none p-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
+            {{-- ELEMEN SISI KANAN UNTUK MOBILE VIEW (< 992px) --}}
+<div class="d-flex align-items-center gap-2 d-lg-none">
+    {{-- Keranjang duplikat khusus Mobile dengan penyesuaian posisi badge --}}
+    <a class="nav-link position-relative px-3 py-2" href="{{ url('/cart') }}" style="color: #000;">
+        <i class="bi bi-cart3 fs-5"></i>
+        {{-- Mengubah 'top-0' menjadi style custom 'top: 5px' agar badge turun dan tidak terpotong --}}
+        <span class="position-absolute start-100 translate-middle badge rounded-pill bg-warning text-dark"
+              style="font-size: 0.65rem; top: 6px; margin-left: -5px;"
+              id="cart-badge-mobile">0</span>
+    </a>
+    {{-- Tombol Hamburger Mobile --}}
+    <button class="navbar-toggler border-0 shadow-none p-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
 
             {{-- BLOK LINK NAVIGASI --}}
             <div class="collapse navbar-collapse" id="navbarNav">
-                <div class="navbar-nav ms-auto align-items-start align-items-lg-center gap-2 py-2 py-lg-0">
+                {{-- Mengubah align-items-start menjadi align-items-stretch pada layar mobile agar item memanjang rapi secara vertikal --}}
+                <div class="navbar-nav ms-auto align-items-stretch align-items-lg-center gap-1 gap-lg-2 py-2 py-lg-0">
 
                     {{-- 1. Beranda --}}
                     <li class="nav-item w-100 w-lg-auto d-flex align-items-center">
-                        <a class="nav-link nav-link-hover px-3 py-2" style="color: #000;" href="{{ url('/') }}">
+                        <a class="nav-link nav-link-hover w-100 px-3" style="color: #000;" href="{{ url('/') }}">
                             <i class="bi bi-house-door"></i> Beranda
                         </a>
                     </li >
 
                     {{-- 2. Menu --}}
                     <li class="nav-item w-100 w-lg-auto d-flex align-items-center">
-                        <a class="nav-link nav-link-hover px-3 py-2" style="color: #000;" href="{{ url('/menu') }}">
+                        <a class="nav-link nav-link-hover w-100 px-3" style="color: #000;" href="{{ url('/menu') }}">
                             <i class="bi bi-grid"></i> Menu
                         </a>
                     </li>
 
                     {{-- 3. Reservasi --}}
                     <li class="nav-item w-100 w-lg-auto d-flex align-items-center">
-                        <a class="nav-link nav-link-hover px-3 py-2" style="color: #000;" href="{{ route('reservasi.index') }}">
+                        <a class="nav-link nav-link-hover w-100 px-3" style="color: #000;" href="{{ route('reservasi.index') }}">
                             <i class="bi bi-calendar-check"></i> Reservasi
                         </a>
                     </li>
 
                     {{-- 4. Tentang Kami --}}
                     <li class="nav-item w-100 w-lg-auto d-flex align-items-center">
-                        <a class="nav-link nav-link-hover px-3 py-2" style="color: #000;" href="{{ url('/tentang') }}">
+                        <a class="nav-link nav-link-hover w-100 px-3" style="color: #000;" href="{{ url('/tentang') }}">
                             <i class="bi bi-info-circle"></i> Tentang
                         </a>
                     </li>
@@ -169,20 +182,10 @@
                     </li>
 
                     {{-- 7. Tombol Riwayat --}}
-                    {{-- <li class="nav-item mt-2 mt-lg-0 w-100 w-lg-auto d-flex align-items-center">
-                        <a class="btn btn-sm ms-lg-1 fw-semibold d-inline-flex align-items-center justify-content-center gap-1"
-                           href="{{ url('/riwayat') }}"
-                           style="background-color: rgba(0,0,0,0.06); color: #000; border: 1.5px solid rgba(0,0,0,0.15); border-radius: 20px; padding: 6px 16px; transition: all 0.2s; height: fit-content;"
-                           onmouseover="this.style.backgroundColor='rgba(0,0,0,0.12)'"
-                           onmouseout="this.style.backgroundColor='rgba(0,0,0,0.06)'">
-                            <i class="bi bi-clock-history"></i>
-                            <span>Riwayat</span>
-                        </a>
-                    </li> --}}
-                    <li class="nav-item mt-2 mt-lg-0 w-100 {{-- Mengizinkan lebar penuh di mobile --}} w-lg-auto d-flex align-items-center">
-                        <a class="btn btn-sm w-100 {{-- Menambahkan w-100 agar memanjang penuh di layout collapse --}} ms-lg-1 fw-semibold d-inline-flex align-items-center justify-content-center gap-1"
+                    <li class="nav-item mt-2 mt-lg-0 w-100 w-lg-auto d-flex align-items-center">
+                        <a class="btn btn-sm w-100 ms-lg-1 fw-semibold d-inline-flex align-items-center justify-content-center gap-1"
                         href="{{ url('/riwayat') }}"
-                        style="background-color: rgba(0,0,0,0.06); color: #000; border: 1.5px solid rgba(0,0,0,0.15); border-radius: 20px; padding: 10px 16px; {{-- Padding vertikal ditambah sedikit agar seimbang dengan nav-link --}} transition: all 0.2s; height: fit-content;"
+                        style="background-color: rgba(0,0,0,0.06); color: #000; border: 1.5px solid rgba(0,0,0,0.15); border-radius: 20px; padding: 10px 16px; transition: all 0.2s; height: fit-content;"
                         onmouseover="this.style.backgroundColor='rgba(0,0,0,0.12)'"
                         onmouseout="this.style.backgroundColor='rgba(0,0,0,0.06)'">
                             <i class="bi bi-clock-history"></i>
@@ -209,7 +212,7 @@
                 <div class="col-12 col-md-8 col-lg-4">
                     <h5 class="fw-bold text-success"><i class="bi bi-shop text-white"></i> RM Saung Tiga</h5>
                     <p class="text-secondary small mx-auto mt-2" style="max-width: 320px;">
-                        Menyajikan cita rasa terbaik dengan bahan-bahan segar pilihan setiap harinya.
+                        Penyajikan cita rasa terbaik dengan bahan-bahan segar pilihan setiap harinya.
                     </p>
                 </div>
 
