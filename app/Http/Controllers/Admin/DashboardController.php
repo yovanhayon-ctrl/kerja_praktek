@@ -21,7 +21,11 @@ class DashboardController extends Controller
 
         // 1. STATISTIK UTAMA
         $total_pesanan    = Pesanan::count();
-        $total_pendapatan = DetailPesanan::sum('subtotal'); 
+        
+        // PERBAIKAN: Hanya menghitung subtotal jika status pesanan adalah 'SELESAI'
+        $total_pendapatan = DetailPesanan::join('pesanans', 'detail_pesanans.pesanan_id', '=', 'pesanans.id')
+            ->where('pesanans.status', 'SELESAI')
+            ->sum('detail_pesanans.subtotal'); 
         
         $menu_terlaris = DetailPesanan::select('nama_menu', DB::raw('SUM(qty) as total_qty'))
             ->groupBy('nama_menu')
@@ -52,7 +56,9 @@ class DashboardController extends Controller
         ];
 
         // 4. DATA HARI INI
+        // PERBAIKAN: Ditambahkan kondisi filter status 'SELESAI' untuk pendapatan hari ini
         $pendapatan_hari_ini = DetailPesanan::join('pesanans', 'detail_pesanans.pesanan_id', '=', 'pesanans.id')
+            ->where('pesanans.status', 'SELESAI')
             ->whereDate('pesanans.created_at', $today)
             ->sum('detail_pesanans.subtotal');
         
