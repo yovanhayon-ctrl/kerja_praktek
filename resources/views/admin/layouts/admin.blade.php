@@ -16,14 +16,14 @@
 
     <style>
         * { font-family: 'Poppins', sans-serif; box-sizing: border-box; }
-        body { background-color: #f1f5f9; margin: 0; }
+        body { background-color: #f1f5f9; margin: 0; overflow-x: hidden; }
 
-        /* ── SIDEBAR ── */
+        /* ── SIDEBAR RESPONSIVE ── */
         .sidebar {
             width: 240px; min-height: 100vh;
             background-color: #0f172a; position: fixed;
             top: 0; left: 0; display: flex; flex-direction: column;
-            z-index: 100; transition: all 0.3s ease;
+            z-index: 1040; transition: transform 0.3s ease;
         }
 
         .sidebar-brand {
@@ -42,7 +42,7 @@
         }
 
         .sidebar-brand .brand-sub { color: #94a3b8; font-size: 0.7rem; }
-        .sidebar-nav { padding: 12px 12px; flex: 1; }
+        .sidebar-nav { padding: 12px 12px; flex: 1; overflow-y: auto; }
 
         .sidebar-label {
             color: #475569; font-size: 0.65rem; font-weight: 600;
@@ -71,8 +71,8 @@
 
         .sidebar-footer .logout-btn:hover { background-color: rgba(239,68,68,0.12); color: #ef4444; }
 
-        /* ── MAIN CONTENT ── */
-        .main-content { margin-left: 240px; min-height: 100vh; transition: all 0.3s ease; }
+        /* ── MAIN CONTENT RESPONSIVE ── */
+        .main-content { margin-left: 240px; min-height: 100vh; transition: margin-left 0.3s ease; }
 
         /* ── TOPBAR ── */
         .topbar {
@@ -99,6 +99,13 @@
             color: #fff; font-weight: 700; font-size: 0.85rem; cursor: pointer;
         }
 
+        /* ── BACKDROP UNTUK MOBILE TIMEOUT ── */
+        .sidebar-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(2px);
+            z-index: 1030; display: none;
+        }
+
         /* ── PAGE CONTENT ── */
         .page-content { padding: 24px; }
 
@@ -106,6 +113,17 @@
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #4ade80; border-radius: 10px; }
+
+        /* ── BREAKPOINTS MEDIA QUERIES (RESPONSIVE ENGINE) ── */
+        @media (max-width: 991.98px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); }
+            .main-content { margin-left: 0 !important; }
+            .sidebar-overlay.show { display: block; }
+            .topbar { padding: 14px 16px; }
+            .page-content { padding: 16px; }
+            .topbar-title p { display: none; } /* Sembunyikan subtitle di HP agar hemat ruang */
+        }
     </style>
 
     @stack('styles')
@@ -116,21 +134,29 @@
 @php 
     $pendingCount = \App\Models\Pesanan::where('status', 'PENDING')->count(); 
     $unreadMessages = \App\Models\Pesan::where('status', 'BELUM_DIBACA')->count();
-    $pendingReservasi = \App\Models\Reservasi::where('status', 'PENDING')->count(); // Hitung reservasi baru
+    $pendingReservasi = \App\Models\Reservasi::where('status', 'PENDING')->count();
 @endphp
 
+{{-- BACKDROP OVERLAY UNTUK MOBILE VIEW --}}
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
 {{-- SIDEBAR --}}
-<aside class="sidebar">
+<aside class="sidebar" id="adminSidebar">
 
     <div class="sidebar-brand">
-        <div class="d-flex align-items-center gap-2">
-            <div class="brand-logo">
-                <i class="bi bi-shop"></i>
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-2">
+                <div class="brand-logo">
+                    <i class="bi bi-shop"></i>
+                </div>
+                <div>
+                    <div class="brand-name">RM Saung Tiga</div>
+                    <div class="brand-sub">Admin Panel</div>
+                </div>
             </div>
-            <div>
-                <div class="brand-name">RM Saung Tiga</div>
-                <div class="brand-sub">Admin Panel</div>
-            </div>
+            <button class="btn p-0 border-0 text-white d-lg-none" id="btnCloseSidebar" style="font-size: 1.25rem;">
+                <i class="bi bi-x-lg"></i>
+            </button>
         </div>
     </div>
 
@@ -157,7 +183,6 @@
             @endif
         </a>
 
-        {{-- LINK MENU DATA RESERVASI MEJA BARU --}}
         <a href="{{ route('admin.reservasi.index') }}"
            class="sidebar-link {{ request()->routeIs('admin.reservasi.*') ? 'active' : '' }}">
             <i class="bi bi-calendar-event"></i> Data Reservasi
@@ -216,17 +241,24 @@
 <div class="main-content">
 
     <div class="topbar">
-        <div class="topbar-title">
-            <h5>@yield('page-title', 'Dashboard')</h5>
-            <p>@yield('page-subtitle', 'Overview performa restoran hari ini')</p>
+        <div class="d-flex align-items-center gap-3">
+            <button class="topbar-icon d-lg-none" id="btnToggleSidebar">
+                <i class="bi bi-list fs-5"></i>
+            </button>
+            
+            <div class="topbar-title">
+                <h5>@yield('page-title', 'Dashboard')</h5>
+                <p>@yield('page-subtitle', 'Overview performa restoran hari ini')</p>
+            </div>
         </div>
+
         <div class="topbar-right">
-            {{-- Lonceng khusus untuk memantau data pesanan masuk makanan --}}
+            {{-- Lonceng Data Pesanan --}}
             <a href="{{ route('admin.pesanan.index') }}" class="topbar-icon position-relative text-decoration-none">
                 <i class="bi bi-bell"></i>
                 @if($pendingCount > 0)
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                    style="font-size:0.55rem;">{{ $pendingCount }}</span>
+                    style="font-size:0.55rem; top: 4px !important;">{{ $pendingCount }}</span>
                 @endif
             </a>
 
@@ -235,12 +267,12 @@
                 <i class="bi bi-envelope"></i>
                 @if($unreadMessages > 0)
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                    style="font-size:0.55rem;">{{ $unreadMessages }}</span>
+                    style="font-size:0.55rem; top: 4px !important;">{{ $unreadMessages }}</span>
                 @endif
             </a>
             
-            {{-- Shortcut ikon orang langsung ke Manajemen Akun Admin --}}
-            <a href="{{ route('admin.manajemen_admin.index') }}" class="topbar-icon text-decoration-none">
+            {{-- Shortcut Akun Admin --}}
+            <a href="{{ route('admin.manajemen_admin.index') }}" class="topbar-icon text-decoration-none d-none d-sm-flex">
                 <i class="bi bi-person"></i>
             </a>
             <div class="admin-avatar">{{ substr(Auth::user()->name ?? 'A', 0, 1) }}</div>
@@ -267,8 +299,27 @@
 
 </div>
 
-{{-- Bootstrap JS --}}
+{{-- Bootstrap JS Bundle --}}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+{{-- JAVASCRIPT TOGGLE SIDEBAR RESPONSIVE --}}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const sidebar = document.getElementById("adminSidebar");
+        const overlay = document.getElementById("sidebarOverlay");
+        const btnToggle = document.getElementById("btnToggleSidebar");
+        const btnClose = document.getElementById("btnCloseSidebar");
+
+        function toggleSidebar() {
+            sidebar.classList.toggle("show");
+            overlay.classList.toggle("show");
+        }
+
+        if(btnToggle) btnToggle.addEventListener("click", toggleSidebar);
+        if(btnClose) btnClose.addEventListener("click", toggleSidebar);
+        if(overlay) overlay.addEventListener("click", toggleSidebar);
+    });
+</script>
 
 @stack('scripts')
 </body>

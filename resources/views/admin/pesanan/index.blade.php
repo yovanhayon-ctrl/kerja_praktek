@@ -3,13 +3,26 @@
 @section('title', 'Admin Pesanan') 
 
 @section('content')
-<div class="container-fluid py-4">
-    {{-- Header --}}
-    <div class="d-flex justify-content-between align-items-center mb-4">
+{{-- Kustomisasi Responsif Khusus Bar Pencarian --}}
+<style>
+    .search-form-responsive {
+        width: 100%;
+    }
+    @media (min-width: 768px) {
+        .search-form-responsive {
+            width: 240px;
+        }
+    }
+</style>
+
+<div class="container-fluid py-3 py-sm-4 px-2 px-sm-3">
+    {{-- Header Layout Responsive --}}
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
         <div>
             <h4 class="fw-bold mb-0" style="font-size: 1.25rem;">Data Pesanan</h4>
+            <p class="text-muted small mb-0 d-none d-sm-block">Kelola entri data pesanan masuk dan pantau status pelayanan.</p>
         </div>
-        <a href="{{ route('admin.pesanan.export', ['status' => $status, 'search' => $search ?? '']) }}" class="btn btn-dark px-3 fw-bold" style="border-radius: 8px; font-size: 0.8rem;">
+        <a href="{{ route('admin.pesanan.export', ['status' => $status, 'search' => $search ?? '']) }}" class="btn btn-dark px-3 py-2 fw-bold text-center" style="border-radius: 8px; font-size: 0.8rem;">
             <i class="bi bi-download me-2"></i> Export to Excel
         </a>
     </div>
@@ -18,10 +31,10 @@
     <div class="row g-3 mb-4">
         @php
             $stats = [
-                ['label' => 'Total Pesanan', 'val' => number_format($total_pesanan), 'icon' => 'bi-list-ul', 'color' => '#4ade80', 'change' => '+126 Bulanin'],
+                ['label' => 'Total Pesanan', 'val' => number_format($total_pesanan), 'icon' => 'bi-list-ul', 'color' => '#4ade80', 'change' => '+126 Bulan ini'],
                 ['label' => 'Pendapatan', 'val' => 'Rp ' . number_format($total_pendapatan, 0, ',', '.'), 'icon' => 'bi-wallet2', 'color' => '#3b82f6', 'change' => '+8% vs kemarin'],
                 ['label' => 'Pesanan Aktif', 'val' => $pesanan_aktif, 'icon' => 'bi-clock', 'color' => '#f59e0b', 'change' => 'Butuh diproses'],
-                ['label' => 'Waktu Tunggu', 'val' => $waktu_tunggu . '.2m', 'icon' => 'bi-hourglass-split', 'color' => '#8b5cf6', 'change' => 'Rata-rata pelayanan'],
+                ['label' => 'Waktu Tunggu', 'val' => $waktu_tunggu . ' m', 'icon' => 'bi-hourglass-split', 'color' => '#8b5cf6', 'change' => 'Rata-rata pelayanan'],
             ];
         @endphp
         @foreach($stats as $stat)
@@ -42,56 +55,64 @@
         @endforeach
     </div>
 
-    {{-- Tab Filter & Search --}}
-    <div class="d-flex justify-content-between align-items-center mb-4 gap-3">
-        <div class="btn-group" role="group">
-            <a href="{{ route('admin.pesanan.index', ['status' => 'semua']) }}" 
-               class="btn btn-sm fw-bold px-3 {{ is_null($status) || $status === 'semua' ? 'btn-success' : 'btn-light text-dark' }}"
-               style="border-radius: 6px; font-size: 0.8rem;">
-                All
-            </a>
-            <a href="{{ route('admin.pesanan.index', ['status' => 'pending']) }}" 
-               class="btn btn-sm fw-bold px-3 {{ $status === 'pending' ? 'btn-success' : 'btn-light text-dark' }}"
-               style="border-radius: 6px; font-size: 0.8rem;">
-                Pending
-            </a>
-            <a href="{{ route('admin.pesanan.index', ['status' => 'diproses']) }}" 
-               class="btn btn-sm fw-bold px-3 {{ $status === 'diproses' ? 'btn-success' : 'btn-light text-dark' }}"
-               style="border-radius: 6px; font-size: 0.8rem;">
-                Processing
-            </a>
-            <a href="{{ route('admin.pesanan.index', ['status' => 'selesai']) }}" 
-               class="btn btn-sm fw-bold px-3 {{ $status === 'selesai' ? 'btn-success' : 'btn-light text-dark' }}"
-               style="border-radius: 6px; font-size: 0.8rem;">
-                Completed
-            </a>
-            <a href="{{ route('admin.pesanan.index', ['status' => 'dibatalkan']) }}" 
-               class="btn btn-sm fw-bold px-3 {{ $status === 'dibatalkan' ? 'btn-success' : 'btn-light text-dark' }}"
-               style="border-radius: 6px; font-size: 0.8rem;">
-                Cancelled
-            </a>
+    {{-- Tab Filter & Search Responsive --}}
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-stretch align-items-md-center mb-4 gap-3">
+        {{-- Pembungkus agar tombol status bisa digeser horizontal pada layar HP kecil --}}
+        <div class="overflow-x-auto pb-1 pb-md-0">
+            <div class="btn-group" role="group" style="white-space: nowrap; display: inline-flex;">
+                <a href="{{ route('admin.pesanan.index', ['status' => 'semua']) }}" 
+                   class="btn btn-sm fw-bold px-3 {{ is_null($status) || $status === 'semua' ? 'btn-success' : 'btn-light text-dark' }}"
+                   style="border-radius: 6px; font-size: 0.8rem;">
+                    All
+                </a>
+                <a href="{{ route('admin.pesanan.index', ['status' => 'pending']) }}" 
+                   class="btn btn-sm fw-bold px-3 {{ $status === 'pending' ? 'btn-success' : 'btn-light text-dark' }}"
+                   style="border-radius: 6px; font-size: 0.8rem;">
+                    Pending
+                </a>
+                <a href="{{ route('admin.pesanan.index', ['status' => 'diproses']) }}" 
+                   class="btn btn-sm fw-bold px-3 {{ $status === 'diproses' ? 'btn-success' : 'btn-light text-dark' }}"
+                   style="border-radius: 6px; font-size: 0.8rem;">
+                    Processing
+                </a>
+                <a href="{{ route('admin.pesanan.index', ['status' => 'selesai']) }}" 
+                   class="btn btn-sm fw-bold px-3 {{ $status === 'selesai' ? 'btn-success' : 'btn-light text-dark' }}"
+                   style="border-radius: 6px; font-size: 0.8rem;">
+                    Completed
+                </a>
+                <a href="{{ route('admin.pesanan.index', ['status' => 'dibatalkan']) }}" 
+                   class="btn btn-sm fw-bold px-3 {{ $status === 'dibatalkan' ? 'btn-success' : 'btn-light text-dark' }}"
+                   style="border-radius: 6px; font-size: 0.8rem;">
+                    Cancelled
+                </a>
+            </div>
         </div>
-        <form method="GET" action="{{ route('admin.pesanan.index') }}" class="d-flex gap-2">
+
+        {{-- Form Cari (Sudah Diperbaiki Menjadi Full-Width di Mobile & Border Rapi) --}}
+        <form method="GET" action="{{ route('admin.pesanan.index') }}" class="search-form-responsive">
             @if($status && $status !== 'semua')
                 <input type="hidden" name="status" value="{{ $status }}">
             @endif
-            <input type="text" name="search" class="form-control form-control-sm" 
-                   placeholder="Cari ID/Pesanan..." value="{{ $search ?? '' }}"
-                   style="width: 200px; border-radius: 6px; font-size: 0.8rem;">
-            <button type="submit" class="btn btn-sm btn-outline-secondary" style="border-radius: 6px;">
-                <i class="bi bi-search"></i>
-            </button>
+            <div class="input-group input-group-sm">
+                <input type="text" name="search" class="form-control" 
+                       placeholder="Cari ID/Pesanan..." value="{{ $search ?? '' }}"
+                       style="font-size: 0.8rem; border-color: #dee2e6; border-right: none; border-top-left-radius: 8px; border-bottom-left-radius: 8px;">
+                <button type="submit" class="btn bg-white text-secondary border" 
+                        style="border-color: #dee2e6; border-left: none; border-top-right-radius: 8px; border-bottom-right-radius: 8px;">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
         </form>
     </div>
 
-    {{-- Table --}}
+    {{-- Table Card --}}
     <div class="card border-0 shadow-sm" style="border-radius: 15px;">
-        <div class="card-body p-4">
+        <div class="card-body p-3 p-sm-4">
             <div class="table-responsive">
-                <table class="table table-hover align-middle">
+                <table class="table table-hover align-middle mb-0">
                     <thead class="bg-light">
                         <tr style="font-size: 0.65rem;">
-                            <th class="ps-4 text-muted fw-bold">ID PESANAN</th>
+                            <th class="ps-3 text-muted fw-bold">ID PESANAN</th>
                             <th class="text-muted fw-bold">PELANGGAN</th>
                             <th class="text-muted fw-bold">MEJA</th>
                             <th class="text-muted fw-bold">MENU</th>
@@ -104,35 +125,29 @@
                     <tbody style="font-size: 0.75rem;">
                         @forelse($pesanans as $pesanan)
                         <tr>
-                            {{-- ID PESANAN Sebelumnya --}}
-                            {{-- <td class="ps-4 fw-bold">
-                                ORD-{{ str_pad($total_orders_count - $loop->index + 1, 3, '0', STR_PAD_LEFT) }}
-                            </td> --}}
-                            {{-- SESUDAH (benar — pakai id langsung dari database) --}}
-                            <td class="ps-4 fw-bold">
+                            <td class="ps-3 fw-bold text-dark">
                                 ORD-{{ str_pad($pesanan->id, 3, '0', STR_PAD_LEFT) }}
                             </td>
                             <td class="fw-bold">{{ $pesanan->nama_pelanggan ?? 'Tanpa Nama' }}</td>
-                            <td>Meja {{ $pesanan->nomor_meja ?? '-' }}</td>
+                            <td><span class="badge bg-light text-dark border px-2 py-1">Meja {{ $pesanan->nomor_meja ?? '-' }}</span></td>
                             <td>
                                 @php
-                                    $menus = $pesanan->details()->pluck('nama_menu')->toArray();
+                                    $menus = $pesanan->details->pluck('nama_menu')->toArray();
                                 @endphp
                                 @if(count($menus) > 0)
-                                    <span>{{ implode(', ', array_slice($menus, 0, 1)) }}</span>
+                                    <span class="fw-semibold text-secondary">{{ implode(', ', array_slice($menus, 0, 1)) }}</span>
                                     @if(count($menus) > 1)
-                                        <br><small class="text-muted">+{{ count($menus) - 1 }} menu lainnya</small>
+                                        <br><small class="text-muted fw-normal">+{{ count($menus) - 1 }} menu lainnya</small>
                                     @endif
                                 @else
                                     <span class="text-muted">-</span>
                                 @endif
                             </td>
                             <td>
-                                <span class="fw-bold">{{ $pesanan->created_at->format('H:i') }}</span>
-                                <br>
-                                <small class="text-muted">WIB</small>
+                                <span class="fw-bold text-dark">{{ $pesanan->created_at->format('H:i') }}</span>
+                                <span class="text-muted small ms-1">WIB</span>
                             </td>
-                            <td class="fw-bold">
+                            <td class="fw-bold text-dark">
                                 Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}
                             </td>
                             <td>
@@ -147,26 +162,26 @@
                                         'CANCELLED' => 'danger'
                                     ][$displayStatus] ?? 'secondary';
                                 @endphp
-                                <span class="badge bg-{{ $badgeColor }}-subtle text-{{ $badgeColor }} px-2 py-1" style="font-size: 0.6rem;">{{ $displayStatus }}</span>
+                                <span class="badge bg-{{ $badgeColor }}-subtle text-{{ $badgeColor }} px-2 py-1" style="font-size: 0.625rem; font-weight: 600;">{{ $displayStatus }}</span>
                             </td>
                             <td class="text-center">
                                 <div class="d-flex gap-1 justify-content-center">
-                                    <a href="{{ route('admin.pesanan.show', $pesanan->id) }}" class="btn btn-sm btn-light border" title="Detail" style="font-size: 0.65rem;">
-                                        <i class="bi bi-eye"></i>
+                                    <a href="{{ route('admin.pesanan.show', $pesanan->id) }}" class="btn btn-sm btn-light border p-1 px-2" title="Detail" style="font-size: 0.65rem;">
+                                        <i class="bi bi-eye text-dark"></i>
                                     </a>
                                     <div class="dropdown">
-                                        <button type="button" class="btn btn-sm btn-light border dropdown-toggle" 
-                                                data-bs-toggle="dropdown" style="font-size: 0.65rem;">
-                                            <i class="bi bi-chevron-down"></i>
+                                        <button type="button" class="btn btn-sm btn-light border dropdown-toggle p-1 px-2" 
+                                                data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 0.65rem;">
+                                            <i class="bi bi-chevron-down text-dark"></i>
                                         </button>
-                                        <ul class="dropdown-menu dropdown-menu-end shadow border-0" style="font-size: 0.7rem;">
+                                        <ul class="dropdown-menu dropdown-menu-end shadow border-0" style="font-size: 0.7rem; border-radius: 8px;">
                                             @if(strtoupper($pesanan->status) !== 'SELESAI' && strtoupper($pesanan->status) !== 'DIBATALKAN')
                                             <li>
                                                 <form action="{{ route('admin.pesanan.updateStatus', $pesanan->id) }}" method="POST" class="d-inline">
                                                     @csrf @method('PATCH')
                                                     <input type="hidden" name="status" value="DIPROSES">
-                                                    <button type="submit" class="dropdown-item">
-                                                        <i class="bi bi-gear me-2"></i> Processing
+                                                    <button type="submit" class="dropdown-item py-2">
+                                                        <i class="bi bi-gear text-info me-2"></i> Processing
                                                     </button>
                                                 </form>
                                             </li>
@@ -176,8 +191,8 @@
                                                 <form action="{{ route('admin.pesanan.updateStatus', $pesanan->id) }}" method="POST" class="d-inline">
                                                     @csrf @method('PATCH')
                                                     <input type="hidden" name="status" value="SELESAI">
-                                                    <button type="submit" class="dropdown-item">
-                                                        <i class="bi bi-check-circle me-2"></i> Completed
+                                                    <button type="submit" class="dropdown-item py-2">
+                                                        <i class="bi bi-check-circle text-success me-2"></i> Completed
                                                     </button>
                                                 </form>
                                             </li>
@@ -186,7 +201,7 @@
                                                 <form action="{{ route('admin.pesanan.updateStatus', $pesanan->id) }}" method="POST" class="d-inline">
                                                     @csrf @method('PATCH')
                                                     <input type="hidden" name="status" value="DIBATALKAN">
-                                                    <button type="submit" class="dropdown-item text-danger">
+                                                    <button type="submit" class="dropdown-item text-danger py-2">
                                                         <i class="bi bi-x-circle me-2"></i> Cancelled
                                                     </button>
                                                 </form>
@@ -198,18 +213,17 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="8" class="text-center py-4 text-muted">Tidak ada pesanan ditemukan.</td>
+                            <td colspan="8" class="text-center py-4 text-muted fw-semibold">Tidak ada data pesanan yang ditemukan.</td>
                         </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
 
-            {{-- Pagination --}}
-            {{-- Pagination --}}
+            {{-- Pagination Component --}}
             @if($pesanans->hasPages())
-            <div class="d-flex justify-content-between align-items-center mt-4">
-                <small class="text-muted">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3 mt-4">
+                <small class="text-muted" style="font-size: 0.75rem;">
                     Menampilkan {{ $pesanans->firstItem() }} - {{ $pesanans->lastItem() }} dari {{ $total_pesanan }} pesanan
                 </small>
                 <nav>
@@ -218,7 +232,7 @@
                         @if($pesanans->onFirstPage())
                             <li class="page-item disabled">
                                 <span class="page-link border-0 shadow-sm rounded-3 me-2 d-flex align-items-center justify-content-center" 
-                                    style="width: 32px; height: 32px; background: #f8fafc; color: #ccc;">
+                                      style="width: 32px; height: 32px; background: #f8fafc; color: #ccc;">
                                     <i class="bi bi-chevron-left"></i>
                                 </span>
                             </li>
@@ -232,29 +246,22 @@
                             </li>
                         @endif
 
-                        {{-- Logika Sliding Pagination (Tampilkan 3 angka saja) --}}
+                        {{-- Sliding Pagination Logic --}}
                         @php
                             $currentPage = $pesanans->currentPage();
                             $lastPage = $pesanans->lastPage();
-
-                            // Menentukan titik mulai: 
-                            // Jika di halaman 1 atau 2, mulai dari 1. 
-                            // Jika sudah di halaman 3 atau lebih, angka mulai bergeser (sliding)
                             $start = max(1, $currentPage - 1);
                             
-                            // Pastikan jika di halaman akhir, range tetap konsisten tampil 3 angka
                             if ($lastPage - $start < 2) {
                                 $start = max(1, $lastPage - 2);
                             }
-
-                            // Tampilkan maksimal 3 angka saja
                             $end = min($start + 2, $lastPage);
                         @endphp
 
                         @foreach ($pesanans->getUrlRange($start, $end) as $page => $url)
                             <li class="page-item">
                                 <a class="page-link border-0 mx-1 rounded-3 d-flex align-items-center justify-content-center {{ $page == $currentPage ? 'bg-success text-white' : 'text-dark bg-transparent' }}" 
-                                style="width: 32px; height: 32px; transition: all 0.2s;" 
+                                style="width: 32px; height: 32px; transition: all 0.2s; font-weight: 600;" 
                                 href="{{ $pesanans->appends(request()->query())->url($page) }}">
                                     {{ $page }}
                                 </a>
@@ -273,7 +280,7 @@
                         @else
                             <li class="page-item disabled">
                                 <span class="page-link border-0 shadow-sm rounded-3 ms-2 d-flex align-items-center justify-content-center" 
-                                    style="width: 32px; height: 32px; background: #f8fafc; color: #ccc;">
+                                      style="width: 32px; height: 32px; background: #f8fafc; color: #ccc;">
                                     <i class="bi bi-chevron-right"></i>
                                 </span>
                             </li>
@@ -281,7 +288,7 @@
                     </ul>
                 </nav>
             </div>
-        @endif
+            @endif
         </div>
     </div>
 </div>
