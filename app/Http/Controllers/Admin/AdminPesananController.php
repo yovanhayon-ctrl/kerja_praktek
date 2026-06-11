@@ -6,14 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Pesanan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Exports\PesananExport;          // <-- TAMBAHAN: Import class Export
-use Maatwebsite\Excel\Facades\Excel;    // <-- TAMBAHAN: Import Facade Excel
+use App\Exports\PesananExport;          // Import class Export
+use Maatwebsite\Excel\Facades\Excel;    // Import Facade Excel
 
 class AdminPesananController extends Controller
 {
     public function index(Request $request)
     {
-        // Filter by status
+        // Filter by status dan search
         $status = $request->query('status', null);
         $search = $request->query('search', null);
         
@@ -21,7 +21,7 @@ class AdminPesananController extends Controller
         
         // Filter by search (ID pesanan)
         if ($search) {
-            // Extract number from ORD-XXX format or just search by ID
+            // Mengambil angka saja dari format ORD-XXX atau langsung berdasarkan ID
             $searchId = preg_replace('/[^0-9]/', '', $search);
             if ($searchId) {
                 $query->where('id', $searchId);
@@ -35,12 +35,16 @@ class AdminPesananController extends Controller
         
         $pesanans = $query->orderBy('created_at', 'desc')->paginate(10);
         
-        // Statistics
+        // --- STATISTIK ---
         $total_pesanan = Pesanan::count();
-        $total_pendapatan = Pesanan::sum('total_harga');
+        
+        // Hanya menghitung total_harga jika status pesanan adalah 'SELESAI'
+        $total_pendapatan = Pesanan::where('status', 'SELESAI')->sum('total_harga');
+        
+        // Menghitung pesanan aktif (PENDING + DIPROSES) agar sinkron dengan lonceng
         $pesanan_aktif = Pesanan::whereIn('status', ['PENDING', 'DIPROSES'])->count();
         
-        // Average waiting time (dalam menit)
+        // Rata-rata waktu tunggu (dalam menit)
         $pesanan_selesai = Pesanan::where('status', 'SELESAI')->get();
         $waktu_tunggu = $pesanan_selesai->count() > 0
             ? round($pesanan_selesai->map(function($p) {
@@ -73,13 +77,13 @@ class AdminPesananController extends Controller
         return back()->with('success', 'Status pesanan berhasil diperbarui!');
     }
 
-    // --- TAMBAHAN METHOD BARU UNTUK EXPORT EXCEL ---
+    // --- EXPORT EXCEL ---
     public function export(Request $request)
     {
         $status = $request->query('status', null);
         $search = $request->query('search', null);
         
-        // Nama file unduhan otomatis mengikuti tanggal & jam saat tombol diklik
+        // Nama file unduhan otomatis mengikuti tanggal & jam saat diklik
         $namaFile = 'data_pesanan_' . date('Y-m-d_H-i-s') . '.xlsx';
 
         return Excel::download(new PesananExport($status, $search), $namaFile);

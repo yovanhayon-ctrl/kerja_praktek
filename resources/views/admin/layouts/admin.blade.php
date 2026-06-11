@@ -130,9 +130,9 @@
 </head>
 <body>
 
-{{-- Menghitung Pesanan Pending, Pesan yang Belum Dibaca, & Reservasi Pending --}}
+{{-- PERBAIKAN: Menghitung Pesanan Aktif (PENDING + DIPROSES), Pesan Belum Dibaca, & Reservasi Pending --}}
 @php 
-    $pendingCount = \App\Models\Pesanan::where('status', 'PENDING')->count(); 
+    $pesanan_aktif = \App\Models\Pesanan::whereIn('status', ['PENDING', 'DIPROSES'])->count(); 
     $unreadMessages = \App\Models\Pesan::where('status', 'BELUM_DIBACA')->count();
     $pendingReservasi = \App\Models\Reservasi::where('status', 'PENDING')->count();
 @endphp
@@ -176,9 +176,10 @@
         <a href="{{ route('admin.pesanan.index') }}"
            class="sidebar-link {{ request()->routeIs('admin.pesanan.*') ? 'active' : '' }}">
             <i class="bi bi-receipt"></i> Data Pesanan
-            @if($pendingCount > 0)
+            {{-- Badge Data Pesanan Aktif --}}
+            @if($pesanan_aktif > 0)
             <span class="ms-auto badge rounded-pill" style="background:#4ade80; color:#fff; font-size:0.65rem;">
-                {{ $pendingCount }}
+                {{ $pesanan_aktif }}
             </span>
             @endif
         </a>
@@ -253,12 +254,12 @@
         </div>
 
         <div class="topbar-right">
-            {{-- Lonceng Data Pesanan --}}
+            {{-- Lonceng Data Pesanan Aktif (PENDING + DIPROSES) --}}
             <a href="{{ route('admin.pesanan.index') }}" class="topbar-icon position-relative text-decoration-none">
                 <i class="bi bi-bell"></i>
-                @if($pendingCount > 0)
+                @if($pesanan_aktif > 0)
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                    style="font-size:0.55rem; top: 4px !important;">{{ $pendingCount }}</span>
+                    style="font-size:0.55rem; top: 4px !important;">{{ $pesanan_aktif }}</span>
                 @endif
             </a>
 
