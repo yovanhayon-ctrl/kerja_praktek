@@ -18,7 +18,7 @@
         <div class="row align-items-center g-5">
             <div class="col-md-6">
                 <span class="badge bg-primary-subtle text-primary mb-2">Tentang Kami</span>
-                <h2 class="fw-bold mb-3">Kami Hadir untuk Memuaskan Selera Anda</h2>
+                <h2 class="fw-bold mb-3">Saung Tiga Menggugah Selera</h2>
                 <p class="text-muted mb-3">
                     RM Saung Tiga adalah rumah makan yang berdiri sejak tahun 2020 dengan misi sederhana:
                     menyajikan makanan lezat berkualitas tinggi dengan harga yang terjangkau untuk semua kalangan.
@@ -102,10 +102,10 @@
                         <tbody>
                             @php
                                 $jadwal = [
-                                    ['hari' => 'Senin - Jumat',  'jam' => '08.00 – 22.00 WIB', 'buka' => true],
-                                    ['hari' => 'Sabtu',          'jam' => '08.00 – 23.00 WIB', 'buka' => true],
-                                    ['hari' => 'Minggu',         'jam' => '09.00 – 21.00 WIB', 'buka' => true],
-                                    ['hari' => 'Hari Libur Nas.','jam' => 'Tutup',              'buka' => false],
+                                    ['hari' => 'Senin - Jumat',  'jam' => '10.00 – 20.00 WIB', 'buka' => true],
+                                    ['hari' => 'Sabtu',          'jam' => '10.00 – 20.00 WIB', 'buka' => true],
+                                    ['hari' => 'Minggu',         'jam' => '10.00 – 20.00 WIB', 'buka' => true],
+                                    
                                 ];
                             @endphp
                             @foreach($jadwal as $j)
@@ -134,8 +134,8 @@
                     <ul class="list-unstyled mb-0">
                         <li class="mb-3">
                             <small class="text-muted d-block mb-1">Telepon / WhatsApp</small>
-                            <a href="tel:+6281234567890" class="text-decoration-none fw-semibold text-dark">
-                                <i class="bi bi-telephone text-success me-1"></i> 0812-3456-7890
+                            <a href="tel:+6281770003330" class="text-decoration-none fw-semibold text-dark">
+                                <i class="bi bi-telephone text-success me-1"></i>  081770003330
                             </a>
                         </li>
                         <li class="mb-3">

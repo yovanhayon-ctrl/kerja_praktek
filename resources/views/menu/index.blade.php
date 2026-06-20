@@ -57,10 +57,10 @@
                     </a>
                 </div>
                 <div class="col p-0 px-1">
-                    <a href="{{ url('/menu') }}?kategori=Paket&search={{ request('search') }}"
-                       class="btn btn-sm filter-btn w-100 text-center text-nowrap {{ request('kategori') == 'Paket' ? 'btn-success active' : 'btn-outline-success' }}"
+                    <a href="{{ url('/menu') }}?kategori=Paketan&search={{ request('search') }}"
+                       class="btn btn-sm filter-btn w-100 text-center text-nowrap {{ request('kategori') == 'Paketan' ? 'btn-success active' : 'btn-outline-success' }}"
                        style="border-radius:20px; font-size: 0.85rem; padding: 6px 0;">
-                        Paket
+                        Paketan
                     </a>
                 </div>
             </div>
@@ -108,7 +108,7 @@
 
                     {{-- Badge Kategori --}}
                     <span class="position-absolute top-0 start-0 m-2 badge"
-                          style="background-color: #eb1414; color: #fff; border-radius: 10px;">
+                        style="background-color: @if($menu->kategori == 'Makanan') #198754 @elseif($menu->kategori == 'Minuman') #0d6efd @else #eb1414 @endif; color: #fff; border-radius: 10px;">
                         <i class="bi bi-fire"></i> {{ $menu->kategori }}
                     </span>
                 </div>

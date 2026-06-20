@@ -36,14 +36,22 @@ class AdminReservasiController extends Controller
             'status' => 'required|in:PENDING,DISETUJUI,SELESAI,DIBATALKAN'
         ]);
 
-        // Temukan data perwakilan yang diklik oleh admin
         $reservasiUtama = Reservasi::findOrFail($id);
 
-        // Kunci Perbaikan: Update status SEMUA meja yang dipesan oleh orang yang sama di waktu yang sama sekaligus!
-        Reservasi::where('nama_lengkap', $reservasiUtama->nama_lengkap)
+        // Inisialisasi query dasar
+        $query = Reservasi::where('nama_lengkap', $reservasiUtama->nama_lengkap)
             ->where('whatsapp', $reservasiUtama->whatsapp)
             ->where('waktu_reservasi', $reservasiUtama->waktu_reservasi)
-            ->update(['status' => $request->status]);
+            ->where('status', $reservasiUtama->status);
+
+        // Kondisi adaptif jika catatan bernilai NULL
+        if (is_null($reservasiUtama->catatan)) {
+            $query->whereNull('catatan');
+        } else {
+            $query->where('catatan', $reservasiUtama->catatan);
+        }
+
+        $query->update(['status' => $request->status]);
 
         return redirect()->back()->with('success', 'Status rombongan reservasi berhasil diperbarui!');
     }

@@ -85,7 +85,7 @@
                             <i class="bi bi-cash-coin text-white fs-5"></i>
                         </div>
                         <div class="flex-grow-1">
-                            <p class="fw-semibold mb-0">Bayar di Kasir (Cash)</p>
+                            <p class="fw-semibold mb-0">Bayar via Kasir</p>
                             <small class="text-muted">Pembayaran dilakukan langsung di kasir</small>
                         </div>
                         <i class="bi bi-check-circle-fill text-danger fs-5"></i>
@@ -93,7 +93,7 @@
                 </div>
                 <div class="form-text mb-3">
                     <i class="bi bi-info-circle"></i>
-                    Saat ini hanya tersedia metode pembayaran tunai (cash).
+                    Saat ini hanya tersedia metode pembayaran Melalui Kasir Secara Langsung
                 </div>
 
             </div>

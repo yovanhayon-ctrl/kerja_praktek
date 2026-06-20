@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Admin RestoKu</title>
+    <title>Login - Admin RM Saung Tiga</title>
 
     {{-- Link Bootstrap & Icons --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -207,7 +207,7 @@
             <i class="bi bi-shield-lock-fill"></i>
         </div>
 
-        <h1 class="title">Admin RestoKu</h1>
+        <h1 class="title">Admin RM Saung Tiga</h1>
         <p class="subtitle">Operational management at your fingertips.</p>
 
         {{-- Alert Notifikasi Error Sistem --}}

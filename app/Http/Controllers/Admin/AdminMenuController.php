@@ -26,7 +26,7 @@ class AdminMenuController extends Controller
             'nama_menu' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'harga'     => 'required|numeric|min:0',
-            'kategori'  => 'required|in:Makanan,Minuman,Paket',
+            'kategori'  => 'required|in:Makanan,Minuman,Paketan',
             'gambar'    => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
@@ -55,8 +55,9 @@ class AdminMenuController extends Controller
             'nama_menu' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'harga'     => 'required|numeric|min:0',
-            'kategori'  => 'required|in:Makanan,Minuman,Paket',
-            'status'    => 'required|boolean', // Logika baru untuk simpan status
+            'kategori'  => 'required|in:Makanan,Minuman,Paketan',
+            // PERBAIKAN: Menggunakan 'sometimes' agar tidak error saat tidak ada input status di form edit
+            'status'    => 'sometimes|boolean', 
             'gambar'    => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
@@ -74,7 +75,7 @@ class AdminMenuController extends Controller
         return redirect()->route('admin.menu.index')->with('success', 'Menu berhasil diperbarui!');
     }
 
-    // Fungsi baru untuk toggle status tanpa ubah logika lain
+    // Fungsi untuk toggle status tanpa ubah logika lain
     public function toggleStatus($id)
     {
         $menu = Menu::findOrFail($id);

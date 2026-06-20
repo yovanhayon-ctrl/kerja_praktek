@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('harga');
             $table->string('kategori');
             $table->string('gambar')->nullable();
+            $table->boolean('status')->default(true); // Kolom status ketersediaan langsung di sini
             $table->timestamps();
         });
     }

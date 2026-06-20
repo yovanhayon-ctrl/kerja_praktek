@@ -55,11 +55,10 @@
         <div class="row g-3 justify-content-center">
             @php
                 $kategori = [
-                    ['gambar' => 'makanan-berat.jpg', 'nama' => 'Makanan Berat', 'slug' => 'Makanan'],
+                    ['gambar' => 'makanan-berat.jpg', 'nama' => 'Makanan', 'slug' => 'Makanan'],
                     ['gambar' => 'minuman.jpg',        'nama' => 'Minuman',       'slug' => 'Minuman'],
-                    ['gambar' => 'dessert.jpg',        'nama' => 'Dessert',       'slug' => 'dessert'],
-                    ['gambar' => 'snack.jpg',          'nama' => 'Snack',         'slug' => 'snack'],
-                    ['gambar' => 'spesial.jpg',        'nama' => 'Spesial',       'slug' => 'spesial'],
+                    ['gambar' => 'paketan.jpeg',        'nama' => 'Paketan',       'slug' => 'Paketan'],
+                    ['gambar' => 'snack.jpg',          'nama' => 'Gorengan',         'slug' => 'Makanan'],
                 ];
             @endphp
 

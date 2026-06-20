@@ -15,6 +15,6 @@ class Menu extends Model
         'harga',
         'kategori',
         'gambar',
-        'tersedia',
+        'status', // ◄ SEKARANG SUDAH SINKRON DENGAN MIGRATION & CONTROLLER
     ];
 }

@@ -56,7 +56,7 @@
                                         <option value="" selected disabled>Pilih Kategori</option>
                                         <option value="Makanan" {{ old('kategori') == 'Makanan' ? 'selected' : '' }}>Makanan</option>
                                         <option value="Minuman" {{ old('kategori') == 'Minuman' ? 'selected' : '' }}>Minuman</option>
-                                        <option value="Paket" {{ old('kategori') == 'Paket' ? 'selected' : '' }}>Paket</option>
+                                        <option value="Paketan" {{ old('kategori') == 'Paketan' ? 'selected' : '' }}>Paketan</option>
                                     </select>
                                     @error('kategori') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>

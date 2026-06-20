@@ -56,7 +56,7 @@
                                     <select name="kategori" class="form-select @error('kategori') is-invalid @enderror" required>
                                         <option value="Makanan" {{ old('kategori', $menu->kategori) == 'Makanan' ? 'selected' : '' }}>Makanan</option>
                                         <option value="Minuman" {{ old('kategori', $menu->kategori) == 'Minuman' ? 'selected' : '' }}>Minuman</option>
-                                        <option value="Paket" {{ old('kategori', $menu->kategori) == 'Paket' ? 'selected' : '' }}>Paket</option>
+                                        <option value="Paketan" {{ old('kategori', $menu->kategori) == 'Paketan' ? 'selected' : '' }}>Paketan</option>
                                     </select>
                                     @error('kategori') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>

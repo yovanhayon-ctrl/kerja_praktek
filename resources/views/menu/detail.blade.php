@@ -36,7 +36,8 @@
         {{-- Detail Info --}}
         <div class="col-md-7">
             {{-- Badge Kategori --}}
-            <span class="badge {{ $menu->kategori == 'Makanan' ? 'bg-danger' : 'bg-info' }} mb-2">
+            <span class="badge mb-2" 
+                style="background-color: @if($menu->kategori == 'Makanan') #198754 @elseif($menu->kategori == 'Minuman') #0d6efd @else #eb1414 @endif; color: #fff; border-radius: 8px; padding: 5px 10px;">
                 {{ $menu->kategori }}
             </span>
 

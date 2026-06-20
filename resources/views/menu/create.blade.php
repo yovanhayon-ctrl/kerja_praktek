@@ -94,8 +94,8 @@
                             <option value="Minuman" {{ old('kategori') == 'Minuman' ? 'selected' : '' }}>
                                 Minuman
                             </option>
-                            <option value="Paket" {{ old('kategori') == 'Paket' ? 'selected' : '' }}>
-                                Paket
+                            <option value="Paketan" {{ old('kategori') == 'Paketan' ? 'selected' : '' }}>
+                                Paketan
                             </option>
                         </select>
                         @error('kategori')

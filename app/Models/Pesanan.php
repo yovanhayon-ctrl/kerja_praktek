@@ -9,9 +9,6 @@ class Pesanan extends Model
 {
     use HasFactory;
 
-    protected $table = 'pesanans';
-
-    // File: app/Models/Pesanan.php
     protected $fillable = [
         'id_pesanan',
         'nama_pelanggan',
@@ -22,6 +19,10 @@ class Pesanan extends Model
         'status',
     ];
 
+    /**
+     * Hubungkan tabel pesanan ke tabel detail_pesanans
+     * (Satu pesanan bisa memiliki banyak detail item/menu)
+     */
     public function details()
     {
         return $this->hasMany(DetailPesanan::class, 'pesanan_id');

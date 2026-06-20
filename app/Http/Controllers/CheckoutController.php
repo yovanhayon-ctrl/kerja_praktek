@@ -19,13 +19,13 @@ class CheckoutController extends Controller
 
         // Simpan pesanan utama
         $pesanan = Pesanan::create([
-            'id_pesanan'        => 'ORD-' . strtoupper(uniqid()), // Tambahkan ini agar ID tidak kosong
-            'nama_pelanggan'    => $request->nama,                // SESUAI MIGRATION
-            'nomor_meja'        => $request->no_meja,             // SESUAI MIGRATION
-            'catatan'           => $request->catatan,              // Simpan catatan dari checkout
-            'detail_menu'       => $request->items,               // SESUAI MIGRATION (Simpan JSON)
+            'id_pesanan'        => 'ORD-' . strtoupper(uniqid()), 
+            'nama_pelanggan'    => $request->nama,                
+            'nomor_meja'        => $request->no_meja,             
+            'catatan'           => $request->catatan,              
+            'detail_menu'       => $request->items,               
             'total_harga'       => $request->total,
-            'status'            => 'PENDING',                     // Gunakan Huruf Kapital sesuai Enum
+            'status'            => 'PENDING',                     
         ]);
 
         // Simpan detail item pesanan
@@ -40,6 +40,14 @@ class CheckoutController extends Controller
                 'subtotal'   => $item['harga'] * $item['qty'],
             ]);
         }
+
+        // ===================================================================
+        // KUNCI PENGAMAN: Simpan ID pesanan yang baru ke session browser user
+        // ===================================================================
+        $riwayatSession = session()->get('customer_orders', []);
+        $riwayatSession[] = $pesanan->id; // Menyimpan ID primary key pesanan
+        session()->put('customer_orders', $riwayatSession);
+        // ===================================================================
 
         return redirect('/riwayat')->with('success', 'Pesanan berhasil dibuat! Silakan bayar di kasir.');
     }

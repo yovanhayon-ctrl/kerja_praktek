@@ -140,23 +140,23 @@
 
                                     // Klasifikasi pembagian kapasitas dan kelas border CSS
                                     if ($i >= 1 && $i <= 15) {
-                                        $kapasitas = '10 Pax'; 
-                                        $filterClass = 'cat-10-pax';
+                                        $kapasitas = '10 Orang'; 
+                                        $filterClass = 'cat-10-orang';
                                         $borderClass = 'border-cat-10';
                                     } elseif ($i == 26 || $i == 27) {
-                                        $kapasitas = '25 Pax'; 
-                                        $filterClass = 'cat-25-pax';
+                                        $kapasitas = '25 Orang'; 
+                                        $filterClass = 'cat-25-orang';
                                         $borderClass = 'border-cat-25';
                                     } else {
-                                        $kapasitas = '8 Pax'; 
-                                        $filterClass = 'cat-8-pax';
+                                        $kapasitas = '8 Orang'; 
+                                        $filterClass = 'cat-8-orang';
                                         $borderClass = 'border-cat-8';
                                     }
                                 @endphp
                                 <div class="col-4 col-sm-3 col-md-2 item-meja-grid {{ $filterClass }}">
                                     <input type="checkbox" class="btn-check" name="nomor_meja[]" id="meja-{{ $i }}" value="{{ $i }}" {{ $isBooked ? 'disabled' : '' }} {{ $isOldSelected ? 'checked' : '' }}>
                                     <label class="btn w-100 py-2 d-flex flex-column align-items-center justify-content-center table-label {{ $borderClass }} {{ $isBooked ? 'meja-booked' : 'meja-ready' }}" for="meja-{{ $i }}">
-                                        <span class="fw-bold text-number">#{{ $i }}</span>
+                                        <span class="fw-bold text-number">{{ $i }}</span>
                                         <small class="text-kapasitas">{{ $kapasitas }}</small>
                                         <small class="text-status mt-1">{{ $isBooked ? 'Booked' : 'Ready' }}</small>
                                     </label>
@@ -322,15 +322,15 @@ document.addEventListener("DOMContentLoaded", function() {
         });
         filterButtons.cat1.addEventListener('click', function() {
             clearActiveFilter(); this.classList.add('active');
-            allMejaItems.forEach(item => item.classList.contains('cat-10-pax') ? item.classList.remove('d-none') : item.classList.add('d-none'));
+            allMejaItems.forEach(item => item.classList.contains('cat-10-orang') ? item.classList.remove('d-none') : item.classList.add('d-none'));
         });
         filterButtons.cat2.addEventListener('click', function() {
             clearActiveFilter(); this.classList.add('active');
-            allMejaItems.forEach(item => item.classList.contains('cat-8-pax') ? item.classList.remove('d-none') : item.classList.add('d-none'));
+            allMejaItems.forEach(item => item.classList.contains('cat-8-orang') ? item.classList.remove('d-none') : item.classList.add('d-none'));
         });
         filterButtons.cat3.addEventListener('click', function() {
             clearActiveFilter(); this.classList.add('active');
-            allMejaItems.forEach(item => item.classList.contains('cat-25-pax') ? item.classList.remove('d-none') : item.classList.add('d-none'));
+            allMejaItems.forEach(item => item.classList.contains('cat-25-orang') ? item.classList.remove('d-none') : item.classList.add('d-none'));
         });
     }
 

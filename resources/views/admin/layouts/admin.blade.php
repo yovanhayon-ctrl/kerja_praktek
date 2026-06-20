@@ -130,11 +130,15 @@
 </head>
 <body>
 
-{{-- PERBAIKAN: Menghitung Pesanan Aktif (PENDING + DIPROSES), Pesan Belum Dibaca, & Reservasi Pending --}}
+{{-- PERBAIKAN FINAL: Menghitung Data Secara Akurat & Efisien --}}
 @php 
     $pesanan_aktif = \App\Models\Pesanan::whereIn('status', ['PENDING', 'DIPROSES'])->count(); 
     $unreadMessages = \App\Models\Pesan::where('status', 'BELUM_DIBACA')->count();
-    $pendingReservasi = \App\Models\Reservasi::where('status', 'PENDING')->count();
+    
+    // Menggunakan COUNT(DISTINCT whatsapp) -> Otomatis anti-error strict mode dan jauh lebih cepat
+    $pendingReservasi = \App\Models\Reservasi::where('status', 'PENDING')
+                        ->distinct()
+                        ->count('whatsapp'); 
 @endphp
 
 {{-- BACKDROP OVERLAY UNTUK MOBILE VIEW --}}
