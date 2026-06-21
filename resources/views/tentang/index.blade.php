@@ -147,10 +147,10 @@
                         <li>
                             <small class="text-muted d-block mb-2">Media Sosial</small>
                             <div class="d-flex gap-2">
-                                <a href="#" class="btn btn-outline-danger btn-sm">
+                                <a href="https://www.instagram.com/rm.saungtiga/" class="btn btn-outline-danger btn-sm">
                                     <i class="bi bi-instagram"></i>
                                 </a>
-                                <a href="#" class="btn btn-outline-primary btn-sm">
+                                <a href="https://www.facebook.com/rmsaungtiga/" class="btn btn-outline-primary btn-sm">
                                     <i class="bi bi-facebook"></i>
                                 </a>
                                 <a href="#" class="btn btn-outline-success btn-sm">

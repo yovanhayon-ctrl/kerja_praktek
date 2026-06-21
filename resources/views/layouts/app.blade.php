@@ -232,7 +232,7 @@
                     <h6 class="fw-semibold text-light">Kontak Kami</h6>
                     <ul class="list-unstyled small text-secondary d-flex flex-column gap-2 mt-2 mx-auto" style="max-width: 300px;">
                         <li><i class="bi bi-geo-alt text-success me-1"></i> JL.Pemuda No.2 RT.02/RW.06, Sawangan, Kota Depok, Jawa Barat 16511</li>
-                        <li><i class="bi bi-clock text-success me-1"></i> 08.00 – 22.00 WIB</li>
+                        <li><i class="bi bi-clock text-success me-1"></i> 10.00 – 20.00 WIB</li>
                         <li><i class="bi bi-telephone text-success me-1"></i> 081770003330</li>
                     </ul>
                 </div>
