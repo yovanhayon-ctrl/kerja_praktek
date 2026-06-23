@@ -8,13 +8,13 @@
 {{-- 1. BANNER / HERO UTAMA        --}}
 {{-- ============================= --}}
 <section class="hero-section text-white d-flex align-items-center"
-         style="min-height: 520px; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('{{ asset('images/banner.jpg') }}') center/cover no-repeat;">
+         style="min-height: 520px; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('{{ asset('images/banner1.jpeg') }}') center/cover no-repeat;">
     <div class="container text-center py-5">
 
-        <span class="badge px-3 py-2 fs-6 mb-3"
+        {{-- <span class="badge px-3 py-2 fs-6 mb-3"
               style="background-color: rgba(74,222,128,0.2); border: 1px solid #ffc107; color: #ffc107; border-radius: 20px;">
             <i class="bi bi-stars"></i> Promo Hari Ini
-        </span>
+        </span> --}}
 
         <h1 class="display-4 fw-bold mb-3">
             Selamat Datang di <span style="color: #ffc107;">Rumah Makan Kami</span>
