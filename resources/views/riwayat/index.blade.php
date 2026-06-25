@@ -43,7 +43,8 @@
                         <div>
                             <h6 class="fw-bold mb-1">
                                 <i class="bi bi-receipt me-1 text-success"></i> 
-                                Pesanan ORD-{{ str_pad($pesanan->id ?? 0, 3, '0', STR_PAD_LEFT) }}
+                                {{-- Disamakan dengan format Admin (Contoh: ORD-005) --}}
+                                Pesanan ORD-{{ str_pad($pesanan->id, 3, '0', STR_PAD_LEFT) }}
                             </h6>
                             <small class="text-muted">
                                 <i class="bi bi-calendar3 me-1"></i>
@@ -94,7 +95,7 @@
                     </div>
 
                     {{-- Catatan Pelanggan --}}
-                    @if(!empty($pesanans) && !empty($pesanan->catatan))
+                    @if(!empty($pesanan->catatan) && $pesanan->catatan !== '-')
                     <div class="alert alert-light border-start border-warning border-3 ps-3 mb-3 py-2 bg-light">
                         <small class="text-warning fw-bold d-block mb-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">CATATAN PELANGGAN:</small>
                         <small class="text-dark italic">"{{ $pesanan->catatan }}"</small>
@@ -105,6 +106,7 @@
                     <div class="bg-light rounded-3 p-3 border border-light-subtle">
                         <small class="text-muted fw-bold d-block mb-3" style="font-size: 0.7rem; letter-spacing: 0.5px;">DETAIL PESANAN:</small>
                         
+                        {{-- Ini yang memanggil relasi 'details' dari model --}}
                         @if(isset($pesanan->details) && $pesanan->details->isNotEmpty())
                             @foreach($pesanan->details as $index => $detail)
                                 <div class="d-flex justify-content-between align-items-center {{ !$loop->last ? 'mb-2 pb-2 border-bottom border-white' : '' }}">
@@ -129,9 +131,16 @@
                 </div>
             </div>
         </div>
-        @foreachend {{-- Menggunakan directive standard @endforeach --}}
         @endforeach
     </div>
+    
+    {{-- Pagination jika ada --}}
+    @if(method_exists($pesanans, 'links'))
+        <div class="d-flex justify-content-center mt-4">
+            {{ $pesanans->links() }}
+        </div>
+    @endif
+    
     @endif
 </div>
 @endsection

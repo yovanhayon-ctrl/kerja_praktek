@@ -58,7 +58,6 @@
                     ['gambar' => 'makanan-berat.jpg', 'nama' => 'Makanan', 'slug' => 'Makanan'],
                     ['gambar' => 'minuman.jpg',        'nama' => 'Minuman',       'slug' => 'Minuman'],
                     ['gambar' => 'paketan.jpeg',        'nama' => 'Paketan',       'slug' => 'Paketan'],
-                    ['gambar' => 'snack.jpg',          'nama' => 'Gorengan',         'slug' => 'Makanan'],
                 ];
             @endphp
 

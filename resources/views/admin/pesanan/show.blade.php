@@ -28,39 +28,47 @@
                         <table class="table align-middle mb-0">
                             <thead class="bg-light">
                                 <tr style="font-size: 0.65rem; letter-spacing: 0.5px;">
-                                    <th class="ps-4 text-muted fw-bold">NAMA MENU</th>
-                                    <th class="text-center text-muted fw-bold">HARGA</th>
-                                    <th class="text-center text-muted fw-bold">CATATAN</th>
-                                    <th class="text-center text-muted fw-bold">QTY</th>
-                                    <th class="text-end pe-4 text-muted fw-bold">SUBTOTAL</th>
+                                    <th class="ps-4 text-muted fw-bold border-0">NAMA MENU</th>
+                                    <th class="text-center text-muted fw-bold border-0">HARGA</th>
+                                    <th class="text-center text-muted fw-bold border-0" style="width: 25%;">CATATAN</th>
+                                    <th class="text-center text-muted fw-bold border-0">QTY</th>
+                                    <th class="text-end pe-4 text-muted fw-bold border-0">SUBTOTAL</th>
                                 </tr>
                             </thead>
                             <tbody style="font-size: 0.75rem;">
                                 @php 
                                     // Decode data rincian menu sesuai bawaan database Anda
                                     $items = json_decode($pesanan->detail_menu, true); 
+                                    
+                                    // Hitung jumlah item untuk rowspan kolom catatan
+                                    $jumlah_item = !empty($items) && is_array($items) ? count($items) : 1;
                                 @endphp
 
                                 @if(!empty($items))
                                     @foreach($items as $item)
                                     <tr>
-                                        <td class="ps-4 fw-bold text-dark">
+                                        <td class="ps-4 fw-bold text-dark border-bottom-0">
                                             {{ $item['nama'] ?? $item['nama_menu'] ?? $item['name'] ?? 'Menu Tidak Diketahui' }}
                                         </td>
-                                        <td class="text-center fw-medium text-secondary">
+                                        <td class="text-center fw-medium text-secondary border-bottom-0">
                                             Rp {{ number_format($item['harga'] ?? $item['price'] ?? 0, 0, ',', '.') }}
                                         </td>
-                                        <td class="text-center text-secondary">
+                                        
+                                        {{-- Rowspan tanpa garis border vertikal agar mulus --}}
+                                        @if($loop->first)
+                                        <td rowspan="{{ $jumlah_item }}" class="text-center text-secondary align-middle" style="background-color: #fcfcfc; border-bottom: none;">
                                             @if(!empty($pesanan->catatan) && $pesanan->catatan !== '-')
-                                                <span class="bg-light px-2 py-1 rounded text-dark small">{{ $pesanan->catatan }}</span>
+                                                <span class="text-dark small fst-italic">"{{ $pesanan->catatan }}"</span>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td>
-                                        <td class="text-center fw-bold text-dark">
+                                        @endif
+
+                                        <td class="text-center fw-bold text-dark border-bottom-0">
                                             {{ $item['qty'] ?? $item['jumlah'] ?? $item['quantity'] ?? 0 }}
                                         </td>
-                                        <td class="text-end pe-4 fw-bold text-dark">
+                                        <td class="text-end pe-4 fw-bold text-dark border-bottom-0">
                                             @php
                                                 $harga = $item['harga'] ?? $item['price'] ?? 0;
                                                 $qty = $item['qty'] ?? $item['jumlah'] ?? $item['quantity'] ?? 0;
@@ -71,14 +79,14 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <td colspan="5" class="text-center py-4 text-muted fw-semibold">Rincian menu tidak ditemukan dalam database.</td>
+                                        <td colspan="5" class="text-center py-4 text-muted fw-semibold border-bottom-0">Rincian menu tidak ditemukan dalam database.</td>
                                     </tr>
                                 @endif
                             </tbody>
                             <tfoot class="bg-light-subtle border-top">
                                 <tr style="font-size: 0.8rem;">
-                                    <td colspan="4" class="ps-4 fw-bold py-3 text-dark">Total Pembayaran</td>
-                                    <td class="text-end pe-4 fw-bold text-success py-3" style="font-size: 1.05rem;">
+                                    <td colspan="4" class="ps-4 fw-bold py-3 text-dark border-0">Total Pembayaran</td>
+                                    <td class="text-end pe-4 fw-bold text-success py-3 border-0" style="font-size: 1.05rem;">
                                         Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}
                                     </td>
                                 </tr>
@@ -109,7 +117,7 @@
                         <span class="text-muted small">Status Saat Ini</span>
                         @php
                             $st = strtoupper($pesanan->status);
-                            $statusMap = ['PENDING'=>'PENDING','DIPROSES'=>'PROCESSING','SELESAI'=>'COMPLETED','DIBATALKAN'=>'CANCELLED'];
+                            $statusMap = ['PENDING'=>'PENDING','DIPROSES'=>'PROCESSING','SELESAI'=>'COMPLETED','DIBATALKAN'=>'CANCELLED','BATAL'=>'CANCELLED'];
                             $displayStatus = $statusMap[$st] ?? $st;
                             $badgeColor = [
                                 'PENDING' => 'warning',
@@ -122,6 +130,18 @@
                             {{ $displayStatus }}
                         </span>
                     </div>
+
+                    {{-- INTEGRASI INTEGRAL: Tombol Lempar Data ke Kasir --}}
+                    @if($st !== 'SELESAI' && $st !== 'DIBATALKAN' && $st !== 'BATAL')
+                        <div class="mt-3 pt-3 border-top">
+                            <a href="{{ route('admin.kasir.prosesPesanan', $pesanan->id) }}" class="btn btn-success w-100 fw-bold py-2 d-flex align-items-center justify-content-center gap-2 shadow-sm" style="border-radius: 8px; font-size: 0.85rem; background-color: #2d6a4f; border-color: #2d6a4f;">
+                                <i class="bi bi-cash-coin fs-6"></i> Proses & Bayar di Kasir
+                            </a>
+                            <small class="text-muted d-block text-center mt-2" style="font-size: 0.7rem; line-height: 1.3;">
+                                *Klik untuk memuat item & nama pelanggan meja ini langsung ke nota kasir aktif.
+                            </small>
+                        </div>
+                    @endif
                 </div>
             </div>
 

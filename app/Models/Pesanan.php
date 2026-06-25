@@ -9,6 +9,8 @@ class Pesanan extends Model
 {
     use HasFactory;
 
+    protected $table = 'pesanans'; // Menghubungkan ke tabel pesanans di database
+
     protected $fillable = [
         'id_pesanan',
         'nama_pelanggan',
@@ -19,12 +21,10 @@ class Pesanan extends Model
         'status',
     ];
 
-    /**
-     * Hubungkan tabel pesanan ke tabel detail_pesanans
-     * (Satu pesanan bisa memiliki banyak detail item/menu)
-     */
+    // PERBAIKAN 1: Nama fungsi diubah menjadi details()
     public function details()
     {
+        // PERBAIKAN 2: Gunakan huruf kapital D untuk DetailPesanan::class
         return $this->hasMany(DetailPesanan::class, 'pesanan_id');
     }
 }

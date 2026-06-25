@@ -49,17 +49,25 @@
                         <span class="input-group-text bg-white">
                             <i class="bi bi-table text-danger"></i>
                         </span>
-                        {{-- ← UBAH: Ditambahkan max="30" --}}
-                        <input type="number"
-                               id="inputMeja"
-                               class="form-control"
-                               placeholder="Contoh: 5"
-                               min="1"
-                               max="30" 
-                               required>
+                        
+                        <select id="inputMeja" class="form-select" required>
+                            <option value="" selected disabled>-- Pilih Nomor Meja --</option>
+                            @for($i = 1; $i <= 30; $i++)
+                                @if(in_array($i, $mejaTerboking ?? []))
+                                    <option value="{{ $i }}" disabled class="bg-light text-muted">
+                                        Meja {{ $i }} (Sudah Terisi)
+                                    </option>
+                                @else
+                                    <option value="{{ $i }}">
+                                        Meja {{ $i }} (Kosong)
+                                    </option>
+                                @endif
+                            @endfor
+                        </select>
+
                     </div>
-                    <div class="form-text text-danger" id="mejaError" style="display: none;">Maksimal nomor meja adalah 30!</div>
-                    <div class="form-text">Lihat nomor meja yang tertera di meja kamu. Maksimal meja 30.</div>
+                    <div class="form-text text-danger" id="mejaError" style="display: none;">Wajib memilih meja yang tersedia!</div>
+                    <div class="form-text">Pilihan meja yang berwarna abu-abu berarti sedang digunakan pelanggan lain atau sudah dibooking.</div>
                 </div>
 
                 {{-- Catatan Tambahan --}}
@@ -85,7 +93,7 @@
                             <i class="bi bi-cash-coin text-white fs-5"></i>
                         </div>
                         <div class="flex-grow-1">
-                            <p class="fw-semibold mb-0">Bayar via Kasir</p>
+                            <p class="fw-semibold mb-0">Bayar via kasir</p>
                             <small class="text-muted">Pembayaran dilakukan langsung di kasir</small>
                         </div>
                         <i class="bi bi-check-circle-fill text-danger fs-5"></i>
@@ -174,7 +182,7 @@
                     </tr>
                     <tr>
                         <td class="text-muted">Pembayaran</td>
-                        <td class="fw-semibold">Cash (Bayar di Kasir)</td>
+                        <td class="fw-semibold">(Bayar di Kasir)</td>
                     </tr>
                 </table>
             </div>
@@ -246,7 +254,7 @@
     document.getElementById('btnPesan').addEventListener('click', function () {
         const nama = document.getElementById('inputNama').value.trim();
         const mejaInput = document.getElementById('inputMeja');
-        const meja = parseInt(mejaInput.value.trim(), 10);
+        const meja = mejaInput.value; // Dapatkan value dari select dropdown
         const cart = getCart();
 
         // Validasi Nama
@@ -256,8 +264,8 @@
             return;
         }
         
-        // ← UBAH: Validasi nomor meja jika kosong, kurang dari 1, atau lebih dari 30
-        if (isNaN(meja) || meja < 1 || meja > 30) {
+        // PERBAIKAN: Validasi nomor meja dropdown
+        if (!meja) {
             mejaInput.focus();
             mejaInput.classList.add('is-invalid');
             document.getElementById('mejaError').style.display = 'block';
@@ -299,17 +307,12 @@
         document.getElementById('formCheckout').submit();
     }
 
-    // Hapus is-invalid saat diketik
+    // Hapus is-invalid saat diketik/dipilih
     document.getElementById('inputNama').addEventListener('input', function () {
         this.classList.remove('is-invalid');
     });
     
-    // ← UBAH: Real-time validation saat mengetik nomor meja
-    document.getElementById('inputMeja').addEventListener('input', function () {
-        const nilai = parseInt(this.value, 10);
-        if (nilai > 30) {
-            this.value = 30; // Otomatis mengunci angka ke 30 jika memaksa mengetik lebih
-        }
+    document.getElementById('inputMeja').addEventListener('change', function () {
         this.classList.remove('is-invalid');
         document.getElementById('mejaError').style.display = 'none';
     });

@@ -88,7 +88,7 @@
             </div>
         </div>
 
-        {{-- Form Cari (Sudah Diperbaiki Menjadi Full-Width di Mobile & Border Rapi) --}}
+        {{-- Form Cari --}}
         <form method="GET" action="{{ route('admin.pesanan.index') }}" class="search-form-responsive">
             @if($status && $status !== 'semua')
                 <input type="hidden" name="status" value="{{ $status }}">
@@ -165,7 +165,19 @@
                                 <span class="badge bg-{{ $badgeColor }}-subtle text-{{ $badgeColor }} px-2 py-1" style="font-size: 0.625rem; font-weight: 600;">{{ $displayStatus }}</span>
                             </td>
                             <td class="text-center">
-                                <div class="d-flex gap-1 justify-content-center">
+                                <div class="d-flex gap-1 justify-content-center align-items-center">
+                                    {{-- INTEGRASI: Tombol Bayar --}}
+                                    @if(in_array(strtoupper($pesanan->status), ['PENDING', 'DIPROSES']))
+                                        <a href="{{ route('admin.kasir.prosesPesanan', $pesanan->id) }}" class="btn btn-sm text-white d-inline-flex align-items-center gap-1 p-1 px-2" title="Proses Bayar di Kasir" style="font-size: 0.65rem; background-color: #2d6a4f; border-radius: 4px;">
+                                            <i class="bi bi-cash-stack"></i> Bayar
+                                        </a>
+                                    @else
+                                        {{-- Trik Tombol Hantu: Menahan ruang kosong agar sejajar --}}
+                                        <div class="btn btn-sm d-inline-flex align-items-center gap-1 p-1 px-2" style="font-size: 0.65rem; visibility: hidden; pointer-events: none;">
+                                            <i class="bi bi-cash-stack"></i> Bayar
+                                        </div>
+                                    @endif
+
                                     <a href="{{ route('admin.pesanan.show', $pesanan->id) }}" class="btn btn-sm btn-light border p-1 px-2" title="Detail" style="font-size: 0.65rem;">
                                         <i class="bi bi-eye text-dark"></i>
                                     </a>

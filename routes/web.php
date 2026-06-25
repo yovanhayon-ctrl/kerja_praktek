@@ -18,11 +18,12 @@ use App\Http\Controllers\Admin\AdminPesananController;
 use App\Http\Controllers\Admin\StatistikController;
 use App\Http\Controllers\Admin\ManajemenAdminController;
 use App\Http\Controllers\Admin\AdminReservasiController; 
+use App\Http\Controllers\Admin\KasirController;
 
 /*
-|-------------------------------------
+|--------------------------------------------------------------------------
 | Web Routes - RestoKu (RM Saung Tiga)
-|-------------------------------------
+|--------------------------------------------------------------------------
 */
 
 //         ===== RUTE CUSTOMER (FRONTEND) =====
@@ -34,8 +35,11 @@ Route::get('/menu/{id}', [MenuController::class, 'show'])->name('menu.show');
 
 // Keranjang & Proses Pemesanan
 Route::get('/cart', function () { return view('cart.index'); })->name('cart');
-Route::get('/checkout', function () { return view('checkout.index'); })->name('checkout');
+
+// PERBAIKAN: Arahkan route checkout ke method index di CheckoutController
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 Route::post('/checkout/simpan', [CheckoutController::class, 'simpan'])->name('checkout.simpan');
+
 Route::get('/riwayat', [RiwayatController::class, 'index'])->name('riwayat');
 
 // Halaman Tentang Kami & Kontak
@@ -92,6 +96,20 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/manajemen-admin', [ManajemenAdminController::class, 'index'])->name('manajemen_admin.index');
     Route::post('/manajemen-admin', [ManajemenAdminController::class, 'store'])->name('manajemen_admin.store');
     Route::delete('/manajemen-admin/{id}', [ManajemenAdminController::class, 'destroy'])->name('manajemen_admin.destroy');
+
+    // Rute Khusus Kasir
+    Route::prefix('kasir')->name('kasir.')->group(function () {
+        Route::get('/', [KasirController::class, 'index'])->name('index');
+        
+        // INTEGRASI: Rute untuk memindahkan/memilih pesanan dari Halaman Pesanan ke Kasir
+        Route::get('/proses-pesanan/{id}', [KasirController::class, 'prosesPesanan'])->name('prosesPesanan');
+        
+        Route::post('/add/{id}', [KasirController::class, 'add'])->name('add');
+        Route::post('/update/{id}', [KasirController::class, 'update'])->name('update');
+        Route::delete('/remove/{id}', [KasirController::class, 'remove'])->name('remove');
+        Route::post('/clear', [KasirController::class, 'clear'])->name('clear');
+        Route::post('/checkout', [KasirController::class, 'checkout'])->name('checkout');
+    });
 
     // Proses Keluar Sistem
     Route::post('/logout', function () {

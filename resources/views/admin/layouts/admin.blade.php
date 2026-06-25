@@ -188,6 +188,11 @@
             @endif
         </a>
 
+        <a href="{{ route('admin.kasir.index') }}"
+           class="sidebar-link {{ request()->routeIs('admin.kasir.*') ? 'active' : '' }}">
+            <i class="bi bi-cash-stack"></i> Sistem Kasir
+        </a>
+
         <a href="{{ route('admin.reservasi.index') }}"
            class="sidebar-link {{ request()->routeIs('admin.reservasi.*') ? 'active' : '' }}">
             <i class="bi bi-calendar-event"></i> Data Reservasi
