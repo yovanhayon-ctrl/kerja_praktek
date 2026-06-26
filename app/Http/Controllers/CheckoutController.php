@@ -12,15 +12,15 @@ class CheckoutController extends Controller
     // Fungsi untuk menampilkan halaman checkout dan mendeteksi meja terpakai
     public function index()
     {
-        // 1. Cari meja dari transaksi langsung (walk-in) hari ini yang statusnya masih PENDING/DIPROSES
-        $pesananAktif = Pesanan::whereDate('created_at', now()->toDateString())
-            ->whereIn('status', ['PENDING', 'DIPROSES'])
+        // 1. Cari meja dari transaksi langsung (walk-in/web) yang statusnya masih PENDING/DIPROSES
+        // PERBAIKAN: Hapus whereDate() agar pesanan yang melewati tengah malam tetap terkunci
+        $pesananAktif = Pesanan::whereIn('status', ['PENDING', 'DIPROSES'])
             ->pluck('nomor_meja')
             ->toArray();
 
-        // 2. Cari meja dari sistem Reservasi hari ini yang statusnya PENDING/DISETUJUI
-        // Menggunakan 'created_at' sebagai alternatif aman agar tidak column not found
-        $reservasiAktif = Reservasi::whereDate('created_at', now()->toDateString()) 
+        // 2. Cari meja dari sistem Reservasi KHUSUS hari ini
+        // PERBAIKAN: Gunakan kolom 'waktu_reservasi' yang lebih tepat untuk deteksi booking
+        $reservasiAktif = Reservasi::whereDate('waktu_reservasi', now()->toDateString()) 
             ->whereIn('status', ['PENDING', 'DISETUJUI'])
             ->pluck('nomor_meja')
             ->toArray();
@@ -28,10 +28,12 @@ class CheckoutController extends Controller
         // 3. Gabungkan kedua data. Pecah jika ada reservasi dengan format koma (contoh: "2,3,4")
         $mejaTerboking = [];
         foreach(array_merge($pesananAktif, $reservasiAktif) as $meja) {
-            $pecah = explode(',', $meja);
+            $pecah = explode(',', (string)$meja);
             foreach($pecah as $m) {
                 // Pastikan hanya angka yang masuk dan tidak ada spasi kosong
-                $mejaTerboking[] = trim($m);
+                if (trim($m) !== '') {
+                    $mejaTerboking[] = (string)trim($m);
+                }
             }
         }
         

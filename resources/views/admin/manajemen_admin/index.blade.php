@@ -59,7 +59,6 @@
                                 <tr style="border-bottom: 1px solid #f1f5f9;">
                                     <td class="py-3 ps-3">
                                         <div class="d-flex align-items-center">
-                                            {{-- Avatar Inisial Bulat --}}
                                             <div class="d-flex align-items-center justify-content-center fw-bold text-primary rounded-circle me-3" 
                                                  style="width: 38px; height: 38px; background-color: #e0e7ff; font-size: 0.8rem; letter-spacing: 0.5px; flex-shrink: 0;">
                                                 {{ strtoupper(substr($admin->name, 0, 2)) }}
@@ -73,17 +72,16 @@
                                         </div>
                                     </td>
                                     <td>
+                                        {{-- PERBAIKAN: Ubah warna dan jenis Role --}}
                                         @php
-                                            $role = strtoupper($admin->role ?? 'STAFF');
+                                            $role = strtoupper($admin->role ?? 'KASIR');
                                             $badgeClass = [
                                                 'SUPER ADMIN' => 'bg-success text-success bg-opacity-10',
-                                                'SUPERADMIN'  => 'bg-success text-success bg-opacity-10',
-                                                'MANAGER'     => 'bg-primary text-primary bg-opacity-10',
-                                                'STAFF'       => 'bg-secondary text-secondary bg-opacity-10'
+                                                'KASIR'       => 'bg-primary text-primary bg-opacity-10'
                                             ][$role] ?? 'bg-secondary text-secondary bg-opacity-10';
                                         @endphp
                                         <span class="badge {{ $badgeClass }} fw-semibold px-2.5 py-1.5" style="font-size: 0.7rem; border-radius: 6px; letter-spacing: 0.3px;">
-                                            {{ $role }}
+                                            <i class="{{ $role == 'SUPER ADMIN' ? 'bi-shield-fill-check' : 'bi-person-badge-fill' }} me-1"></i>{{ $role }}
                                         </span>
                                     </td>
                                     <td class="text-secondary font-monospace" style="font-size: 0.825rem;">{{ $admin->email }}</td>
@@ -141,7 +139,7 @@
                             <label class="form-label text-secondary fw-semibold mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">FULL NAME</label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-light border-0 text-muted px-3" style="border-radius: 10px 0 0 10px;"><i class="bi bi-person"></i></span>
-                                <input type="text" name="name" class="form-control bg-light border-0 py-2.5" placeholder="Admin / User" style="border-radius: 0 10px 10px 0; font-size: 0.825rem;" required>
+                                <input type="text" name="name" class="form-control bg-light border-0 py-2.5" placeholder="Admin / Kasir Baru" style="border-radius: 0 10px 10px 0; font-size: 0.825rem;" required>
                             </div>
                         </div>
 
@@ -149,7 +147,7 @@
                             <label class="form-label text-secondary fw-semibold mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">EMAIL ADDRESS</label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-light border-0 text-muted px-3" style="border-radius: 10px 0 0 10px;"><i class="bi bi-envelope"></i></span>
-                                <input type="email" name="email" class="form-control bg-light border-0 py-2.5" placeholder="admin@rmsaungtiga.com" style="border-radius: 0 10px 10px 0; font-size: 0.825rem;" required>
+                                <input type="email" name="email" class="form-control bg-light border-0 py-2.5" placeholder="kasir@rmsaungtiga.com" style="border-radius: 0 10px 10px 0; font-size: 0.825rem;" required>
                             </div>
                         </div>
 
@@ -168,9 +166,9 @@
                             <label class="form-label text-secondary fw-semibold mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">ASSIGN ROLE</label>
                             <select name="role" class="form-select form-select-sm bg-light border-0 py-2.5" style="border-radius: 10px; font-size: 0.825rem; color: #475569;" required>
                                 <option value="" selected disabled>Pilih hak akses...</option>
-                                <option value="SUPER ADMIN">SUPER ADMIN</option>
-                                <option value="MANAGER">MANAGER</option>
-                                <option value="STAFF">STAFF</option>
+                                {{-- PERBAIKAN: Hanya ada opsi Super Admin dan Kasir --}}
+                                <option value="SUPER ADMIN">SUPER ADMIN (Full Access)</option>
+                                <option value="KASIR">KASIR (Limited Access)</option>
                             </select>
                         </div>
 

@@ -39,19 +39,24 @@ class KasirController extends Controller
         }
 
         // --- LOGIKA SENSOR MEJA TERBOKING ---
-        $pesananAktif = Pesanan::whereDate('created_at', now()->toDateString())
-            ->whereIn('status', ['PENDING', 'DIPROSES'])
+        
+        // PERBAIKAN 1: Hapus whereDate pada Pesanan agar pesanan yang lewat tengah malam tetap terdeteksi
+        $pesananAktif = Pesanan::whereIn('status', ['PENDING', 'DIPROSES'])
             ->pluck('nomor_meja')->toArray();
 
+        // Untuk reservasi, tetap gunakan filter tanggal hari ini (pastikan nama kolomnya sesuai database Anda, misal 'waktu_reservasi' atau 'created_at')
         $reservasiAktif = Reservasi::whereDate('created_at', now()->toDateString())
             ->whereIn('status', ['PENDING', 'DISETUJUI'])
             ->pluck('nomor_meja')->toArray();
 
+        // PERBAIKAN 2: Keamanan array ekstra untuk mencegah error data kosong/tipe data
         $mejaTerboking = [];
         foreach(array_merge($pesananAktif, $reservasiAktif) as $meja) {
-            $pecah = explode(',', $meja);
+            $pecah = explode(',', (string)$meja);
             foreach($pecah as $m) {
-                $mejaTerboking[] = trim($m);
+                if (trim($m) !== '') {
+                    $mejaTerboking[] = (string)trim($m);
+                }
             }
         }
         $mejaTerboking = array_unique($mejaTerboking);

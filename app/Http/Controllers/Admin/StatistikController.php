@@ -10,9 +10,20 @@ use Illuminate\Http\Request;
 
 class StatistikController extends Controller
 {
+    // PENGAMANAN: Blokir akses jika yang login bukan SUPER ADMIN
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (auth()->check() && strtoupper(auth()->user()->role) !== 'SUPER ADMIN') {
+                abort(403, 'AKSES DITOLAK: Halaman Statistik khusus Super Admin.');
+            }
+            return $next($request);
+        });
+    }
+
     public function index()
     {
-        // 1. Ringkasan Data (Cards) - PERBAIKAN: Hanya menghitung pendapatan dari pesanan SELESAI
+        // 1. Ringkasan Data (Cards) - Hanya menghitung pendapatan dari pesanan SELESAI
         $total_pendapatan = Pesanan::where('status', 'SELESAI')->sum('total_harga'); 
         $total_pesanan = Pesanan::count();
         $total_menu = Menu::count();
@@ -33,7 +44,7 @@ class StatistikController extends Controller
             $date = Carbon::now()->subDays($i);
             $grafik_label[] = $date->translatedFormat('d M');
             
-            // PERBAIKAN: Grafik hanya mencatat omset harian dari pesanan yang 'SELESAI'
+            // Grafik hanya mencatat omset harian dari pesanan yang 'SELESAI'
             $pendapatan_harian = Pesanan::where('status', 'SELESAI')
                 ->whereDate('created_at', $date->toDateString())
                 ->sum('total_harga');

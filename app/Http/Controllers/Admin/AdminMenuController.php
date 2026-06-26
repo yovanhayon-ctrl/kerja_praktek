@@ -9,6 +9,20 @@ use Illuminate\Support\Facades\Storage;
 
 class AdminMenuController extends Controller
 {
+    // =====================================================================
+    // INI GEMBOKNYA: Blokir akses jika yang login bukan SUPER ADMIN
+    // =====================================================================
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (auth()->check() && strtoupper(auth()->user()->role) !== 'SUPER ADMIN') {
+                abort(403, 'AKSES DITOLAK: Halaman Kelola Menu khusus Super Admin.');
+            }
+            return $next($request);
+        });
+    }
+    // =====================================================================
+
     public function index()
     {
         $menus = Menu::latest()->paginate(10);
@@ -56,7 +70,6 @@ class AdminMenuController extends Controller
             'deskripsi' => 'nullable|string',
             'harga'     => 'required|numeric|min:0',
             'kategori'  => 'required|in:Makanan,Minuman,Paketan',
-            // PERBAIKAN: Menggunakan 'sometimes' agar tidak error saat tidak ada input status di form edit
             'status'    => 'sometimes|boolean', 
             'gambar'    => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
@@ -75,7 +88,6 @@ class AdminMenuController extends Controller
         return redirect()->route('admin.menu.index')->with('success', 'Menu berhasil diperbarui!');
     }
 
-    // Fungsi untuk toggle status tanpa ubah logika lain
     public function toggleStatus($id)
     {
         $menu = Menu::findOrFail($id);
