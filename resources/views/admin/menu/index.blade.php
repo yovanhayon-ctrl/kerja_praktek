@@ -84,6 +84,25 @@
                 </tbody>
             </table>
         </div>
+        
+        {{-- PAGINATION YANG SUDAH DIPERBAIKI --}}
+        @if($menus->hasPages())
+        <div class="mt-4">
+            {{ $menus->appends(request()->query())->links('pagination::bootstrap-5') }}
+        </div>
+        @endif
+        
     </div>
 </div>
 @endsection
+
+{{-- STYLE KHUSUS UNTUK MERAPIKAN PAGINATION --}}
+@push('styles')
+<style>
+    /* Styling pagination agar serasi dan rapi */
+    .pagination { margin-bottom: 0; }
+    .pagination .page-item.active .page-link { background-color: #198754; border-color: #198754; color: #fff; }
+    .pagination .page-link { color: #198754; border-radius: 6px; margin: 0 3px; border: 1px solid #dee2e6;}
+    .pagination .page-link:hover { color: #fff; background-color: #198754; border-color: #198754; }
+</style>
+@endpush

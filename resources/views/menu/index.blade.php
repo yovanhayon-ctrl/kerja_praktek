@@ -6,92 +6,73 @@
 <div class="container py-5">
 
     {{-- JUDUL --}}
-    <div class="text-center mb-4">
+    <div class="text-center mb-5">
         <h2 class="fw-bold">Menu Kami</h2>
         <p class="text-muted">Pilih makanan & minuman favoritmu</p>
     </div>
 
     {{-- SEARCH & FILTER --}}
-    <div class="row g-2 mb-4">
-        {{-- Search --}}
-        <div class="col-md-6">
+    <div class="row align-items-center mb-4 g-3">
+        
+        {{-- Search (Kiri) --}}
+        <div class="col-md-5 col-lg-4">
             <form method="GET" action="{{ url('/menu') }}" id="formSearch">
-                <div class="input-group">
-                    <span class="input-group-text bg-white">
-                        <i class="bi bi-search"></i>
+                {{-- Dibuat rounded pill (50px) dengan overflow hidden agar bentuknya membulat di kedua ujung --}}
+                <div class="input-group shadow-sm" style="border-radius: 50px; overflow: hidden; border: 1px solid #dee2e6;">
+                    <span class="input-group-text bg-white border-0 ps-3">
+                        <i class="bi bi-search text-muted"></i>
                     </span>
                     <input type="text"
                            name="search"
                            id="searchInput"
-                           class="form-control border-start-0"
+                           class="form-control border-0 shadow-none"
                            placeholder="Cari menu..."
-                           value="{{ request('search') }}">
-                    {{-- Pertahankan filter kategori saat search --}}
+                           value="{{ request('search') }}"
+                           style="box-shadow: none !important;">
                     <input type="hidden" name="kategori" value="{{ request('kategori') }}">
                 </div>
             </form>
         </div>
 
-        {{-- Filter Kategori (Terbagi Rata/Space Evenly di Mobile, Rapi di Laptop) --}}
-        <div class="col-md-6">
-            <div class="row g-2 row-cols-4 w-100 m-0 p-0 filter-container">
-                <div class="col p-0 px-1">
-                    <a href="{{ url('/menu') }}?search={{ request('search') }}"
-                       class="btn btn-sm filter-btn w-100 text-center text-nowrap {{ !request('kategori') ? 'btn-success active' : 'btn-outline-success' }}"
-                       style="border-radius:20px; font-size: 0.85rem; padding: 6px 0;">
-                        Semua
-                    </a>
-                </div>
-                <div class="col p-0 px-1">
-                    <a href="{{ url('/menu') }}?kategori=Makanan&search={{ request('search') }}"
-                       class="btn btn-sm filter-btn w-100 text-center text-nowrap {{ request('kategori') == 'Makanan' ? 'btn-success active' : 'btn-outline-success' }}"
-                       style="border-radius:20px; font-size: 0.85rem; padding: 6px 0;">
-                        Makanan
-                    </a>
-                </div>
-                <div class="col p-0 px-1">
-                    <a href="{{ url('/menu') }}?kategori=Minuman&search={{ request('search') }}"
-                       class="btn btn-sm filter-btn w-100 text-center text-nowrap {{ request('kategori') == 'Minuman' ? 'btn-success active' : 'btn-outline-success' }}"
-                       style="border-radius:20px; font-size: 0.85rem; padding: 6px 0;">
-                        Minuman
-                    </a>
-                </div>
-                <div class="col p-0 px-1">
-                    <a href="{{ url('/menu') }}?kategori=Paketan&search={{ request('search') }}"
-                       class="btn btn-sm filter-btn w-100 text-center text-nowrap {{ request('kategori') == 'Paketan' ? 'btn-success active' : 'btn-outline-success' }}"
-                       style="border-radius:20px; font-size: 0.85rem; padding: 6px 0;">
-                        Paketan
-                    </a>
-                </div>
+        {{-- Filter Kategori (Kanan) --}}
+        <div class="col-md-7 col-lg-8 d-flex justify-content-md-end">
+            <div class="d-flex flex-wrap gap-2">
+                <a href="{{ url('/menu') }}?search={{ request('search') }}"
+                   class="btn filter-btn {{ !request('kategori') ? 'btn-success active' : 'btn-outline-success bg-white' }}"
+                   style="border-radius: 50px; padding: 6px 20px; font-size: 0.85rem;">
+                    Semua
+                </a>
+                <a href="{{ url('/menu') }}?kategori=Makanan&search={{ request('search') }}"
+                   class="btn filter-btn {{ request('kategori') == 'Makanan' ? 'btn-success active' : 'btn-outline-success bg-white' }}"
+                   style="border-radius: 50px; padding: 6px 20px; font-size: 0.85rem;">
+                    Makanan
+                </a>
+                <a href="{{ url('/menu') }}?kategori=Minuman&search={{ request('search') }}"
+                   class="btn filter-btn {{ request('kategori') == 'Minuman' ? 'btn-success active' : 'btn-outline-success bg-white' }}"
+                   style="border-radius: 50px; padding: 6px 20px; font-size: 0.85rem;">
+                    Minuman
+                </a>
+                <a href="{{ url('/menu') }}?kategori=Paketan&search={{ request('search') }}"
+                   class="btn filter-btn {{ request('kategori') == 'Paketan' ? 'btn-success active' : 'btn-outline-success bg-white' }}"
+                   style="border-radius: 50px; padding: 6px 20px; font-size: 0.85rem;">
+                    Paketan
+                </a>
             </div>
         </div>
+        
     </div>
 
-    {{-- Info jumlah hasil --}}
-    <p class="text-muted small mb-3">
-        Menampilkan <strong>{{ $menus->firstItem() ?? 0 }}</strong> -
-        <strong>{{ $menus->lastItem() ?? 0 }}</strong>
-        dari <strong>{{ $menus->total() }}</strong> menu
-        @if(request('search'))
-            untuk pencarian "<strong>{{ request('search') }}</strong>"
-        @endif
-    </p>
-
     {{-- NOTIFIKASI BERHASIL TAMBAH KE CART --}}
-    <div id="alertCart" class="alert alert-success alert-dismissible d-none" role="alert">
-        <i class="bi bi-check-circle"></i> <span id="alertMsg"></span>
+    <div id="alertCart" class="alert alert-success alert-dismissible d-none shadow-sm" role="alert" style="border-radius: 12px;">
+        <i class="bi bi-check-circle-fill me-2"></i> <span id="alertMsg"></span>
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 
     {{-- LIST MENU --}}
     <div class="row g-4" id="menuList">
-
         @forelse($menus as $menu)
-        <div class="col-6 col-md-4 col-lg-3 menu-item"
-             data-kategori="{{ $menu->kategori }}"
-             data-nama="{{ strtolower($menu->nama_menu) }}">
+        <div class="col-6 col-md-4 col-lg-3 menu-item">
             <div class="card h-100 border-0 shadow-sm menu-card">
-
                 {{-- Gambar --}}
                 <div class="position-relative overflow-hidden" style="border-radius: 16px 16px 0 0;">
                     @if($menu->gambar)
@@ -107,9 +88,9 @@
                     @endif
 
                     {{-- Badge Kategori --}}
-                    <span class="position-absolute top-0 start-0 m-2 badge"
-                        style="background-color: @if($menu->kategori == 'Makanan') #198754 @elseif($menu->kategori == 'Minuman') #0d6efd @else #eb1414 @endif; color: #fff; border-radius: 10px;">
-                        <i class="bi bi-fire"></i> {{ $menu->kategori }}
+                    <span class="position-absolute top-0 start-0 m-2 badge shadow-sm"
+                        style="background-color: @if($menu->kategori == 'Makanan') #198754 @elseif($menu->kategori == 'Minuman') #0d6efd @else #eb1414 @endif; color: #fff; border-radius: 10px; font-weight: normal; padding: 6px 10px;">
+                        <i class="bi bi-tag-fill me-1"></i> {{ $menu->kategori }}
                     </span>
                 </div>
 
@@ -118,7 +99,7 @@
                     <h6 class="card-title fw-bold mb-1 text-truncate">{{ $menu->nama_menu }}</h6>
                     <p class="text-muted small mb-2">{{ $menu->kategori }}</p>
                     
-                    <p class="fw-bold mt-auto mb-3" style="color: #000000; font-size: 1rem;">
+                    <p class="fw-bold mt-auto mb-3" style="color: #000000; font-size: 1.1rem;">
                         Rp {{ number_format($menu->harga, 0, ',', '.') }}
                     </p>
 
@@ -138,22 +119,21 @@
                         </button>
                     </div>
                 </div>
-
             </div>
         </div>
-
         @empty
         <div class="col-12 text-center py-5">
-            <i class="bi bi-inbox fs-1 text-muted"></i>
-            <p class="text-muted mt-2">Belum ada menu tersedia.</p>
+            <i class="bi bi-inbox fs-1 text-muted mb-3 d-block"></i>
+            <h5 class="fw-bold">Pencarian Tidak Ditemukan</h5>
+            <p class="text-muted mt-2">Maaf, menu yang Anda cari belum tersedia.</p>
         </div>
         @endforelse
-
     </div>
 
     {{-- PAGINATION --}}
     @if($menus->hasPages())
-    <div class="d-flex justify-content-center mt-5">
+    {{-- Menghapus d-flex justify-content-center agar styling bawaan Laravel memisahkan teks & angka --}}
+    <div class="mt-5">
         {{ $menus->appends(request()->query())->links('pagination::bootstrap-5') }}
     </div>
     @endif
@@ -163,32 +143,32 @@
 
 @push('styles')
 <style>
+    body { background-color: #f8f9fa; }
+    
     .menu-card { transition: transform 0.2s, box-shadow 0.2s; border-radius: 16px; }
-    .menu-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.12) !important; }
+    .menu-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important; }
 
-    /* Hover Tombol Pesan: Hanya ganti warna background, tanpa animasi gerak/shadow keluar */
+    /* Menghilangkan efek biru pada input saat difokuskan */
+    #searchInput:focus { outline: none; border: none; box-shadow: none; }
+
+    /* Hover Tombol Pesan */
     .btn-tambah-cart:hover {
         background-color: #13633d !important;
         transform: none !important;
         box-shadow: none !important;
     }
 
-    /* Styling pagination aktif agar serasi dengan nuansa hijau Saung Tiga */
+    /* Styling pagination */
+    .pagination { margin-bottom: 0; }
     .pagination .page-item.active .page-link { background-color: #198754; border-color: #198754; color: #fff; }
-    .pagination .page-link { color: #198754; }
+    .pagination .page-link { color: #198754; border-radius: 6px; margin: 0 3px; border: 1px solid #dee2e6;}
     .pagination .page-link:hover { color: #fff; background-color: #198754; border-color: #198754; }
     
     /* Warna aktif pada filter tombol kategori */
-    .filter-btn.btn-success { background-color: #198754; border-color: #198754; }
-    .filter-btn.btn-outline-success { color: #198754; border-color: #198754; background-color: transparent; }
+    .filter-btn { transition: all 0.2s; border: 1px solid #198754; }
+    .filter-btn.btn-success { background-color: #198754; border-color: #198754; color: #fff; }
+    .filter-btn.btn-outline-success { color: #198754; }
     .filter-btn.btn-outline-success:hover { background-color: #198754; color: #fff; }
-
-    /* Membatasi lebar maksimum baris tombol di desktop agar tidak terlalu molor panjang */
-    @media (min-width: 768px) {
-        .filter-container {
-            max-width: 440px;
-        }
-    }
 </style>
 @endpush
 
@@ -223,23 +203,23 @@
             updateCartBadge();
 
             // Notifikasi atas
-            document.getElementById('alertMsg').textContent = nama + ' berhasil ditambahkan ke cart!';
+            document.getElementById('alertMsg').textContent = nama + ' berhasil ditambahkan ke keranjang!';
             const alertEl = document.getElementById('alertCart');
             alertEl.classList.remove('d-none');
             setTimeout(() => alertEl.classList.add('d-none'), 3000);
 
-            // Perubahan State Tombol: Dikunci murni hanya ganti teks & warna tanpa efek gerak layout
+            // Perubahan State Tombol
             const textEl = this.querySelector('span');
             const iconEl = this.querySelector('i');
             
-            this.style.backgroundColor = '#13633d'; // warna hover/aktif sukses
+            this.style.backgroundColor = '#13633d';
             iconEl.className = 'bi bi-check-lg';
             textEl.textContent = 'Sukses';
             
             setTimeout(() => {
                 iconEl.className = 'bi bi-cart-plus';
                 textEl.textContent = 'Pesan';
-                this.style.backgroundColor = '#198754'; // kembalikan ke warna asli awal
+                this.style.backgroundColor = '#198754';
             }, 1200);
         });
     });
